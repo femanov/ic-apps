@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1297</width>
+    <height>680</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>machne mode save/restore</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout_2">
+    <item row="0" column="0">
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="2" column="0">
+       <layout class="QGridLayout" name="gridLayout_7">
+        <item row="1" column="3">
+         <widget class="QPushButton" name="pushButtonMarke2v2">
+          <property name="text">
+           <string>e2v2</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QPushButton" name="pushButtonMarke2v4">
+          <property name="text">
+           <string>e2v4</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="7">
+         <widget class="QPushButton" name="pushButtonArchive">
+          <property name="text">
+           <string>Archive</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QPushButton" name="pushButtonMarkp2v4">
+          <property name="text">
+           <string>p2v4</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="4">
+         <widget class="QPushButton" name="pushButtonMarkp2v2">
+          <property name="text">
+           <string>p2v2</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="9">
+         <widget class="QPushButton" name="pushButtonLoad">
+          <property name="minimumSize">
+           <size>
+            <width>122</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Load</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="6">
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="0" column="3">
+         <widget class="QPushButton" name="pushButtonMarkpinj">
+          <property name="text">
+           <string>pinj</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="4">
+         <widget class="QPushButton" name="pushButtonMarkpext">
+          <property name="text">
+           <string>pext</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QPushButton" name="pushButtonMarkeinj">
+          <property name="toolTip">
+           <string notr="true">mark selected mode as electron injection</string>
+          </property>
+          <property name="text">
+           <string>einj</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_3">
+          <property name="text">
+           <string>Mark</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QPushButton" name="pushButtonMarkeext">
+          <property name="text">
+           <string>eext</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="1" column="0">
+       <widget class="QTableWidget" name="tableWidgetmodes">
+        <property name="minimumSize">
+         <size>
+          <width>700</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>1400</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="editTriggers">
+         <set>QAbstractItemView::NoEditTriggers</set>
+        </property>
+        <property name="selectionBehavior">
+         <enum>QAbstractItemView::SelectRows</enum>
+        </property>
+        <property name="rowCount">
+         <number>0</number>
+        </property>
+        <attribute name="verticalHeaderVisible">
+         <bool>false</bool>
+        </attribute>
+        <column>
+         <property name="text">
+          <string>who</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>what</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>when</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>mark</string>
+         </property>
+        </column>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <layout class="QGridLayout" name="gridLayout_3">
+        <item row="1" column="1">
+         <widget class="QLineEdit" name="commentLine"/>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>comment:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <layout class="QGridLayout" name="gridLayout_8">
+          <item row="0" column="0">
+           <widget class="QLineEdit" name="authorLine"/>
+          </item>
+          <item row="0" column="1">
+           <widget class="QPushButton" name="pushButtonSave">
+            <property name="minimumSize">
+             <size>
+              <width>122</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>122</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>save</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_5">
+          <property name="text">
+           <string>author:</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="0" column="1" rowspan="4">
+       <layout class="QGridLayout" name="gridLayout_4">
+        <property name="sizeConstraint">
+         <enum>QLayout::SetFixedSize</enum>
+        </property>
+        <item row="0" column="0">
+         <widget class="QTableWidget" name="tableWidget">
+          <property name="maximumSize">
+           <size>
+            <width>230</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <column>
+           <property name="text">
+            <string>parameter</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>value</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+        <item row="0" column="1" rowspan="3">
+         <widget class="QTreeWidget" name="sysTree">
+          <property name="minimumSize">
+           <size>
+            <width>300</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>300</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="contextMenuPolicy">
+           <enum>Qt::ActionsContextMenu</enum>
+          </property>
+          <property name="toolTip">
+           <string notr="true"/>
+          </property>
+          <property name="statusTip">
+           <string notr="true"/>
+          </property>
+          <column>
+           <property name="text">
+            <string>subsys</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+        <item row="1" column="0" rowspan="2">
+         <widget class="QTableWidget" name="kindTable">
+          <property name="maximumSize">
+           <size>
+            <width>230</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <column>
+           <property name="text">
+            <string>data type</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>L</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="0" column="0">
+       <layout class="QGridLayout" name="gridLayout_5">
+        <item row="0" column="1">
+         <widget class="QLineEdit" name="lineEditLike"/>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>search</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0" colspan="2">
+         <layout class="QGridLayout" name="gridLayout_6">
+          <item row="0" column="0">
+           <widget class="QPushButton" name="pushButtonPrev">
+            <property name="minimumSize">
+             <size>
+              <width>85</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>&lt;&lt;</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>at</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="7">
+           <widget class="QPushButton" name="pushButtonNext">
+            <property name="minimumSize">
+             <size>
+              <width>85</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>&gt;&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="FSpinBox" name="nrows_spinbox">
+            <property name="minimumSize">
+             <size>
+              <width>70</width>
+              <height>0</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="5">
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>of</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <widget class="FSpinBox" name="startrow_spinbox">
+            <property name="minimumSize">
+             <size>
+              <width>70</width>
+              <height>0</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="6">
+           <widget class="FSpinBox" name="maxrows_spinbox">
+            <property name="minimumSize">
+             <size>
+              <width>70</width>
+              <height>0</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>FSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>fwidgets.fspinbox</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

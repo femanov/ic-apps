@@ -1,0 +1,5 @@
+
+QWidget
+{
+    font-size: 12pt;
+}

@@ -1,0 +1,80 @@
+
+QToolTip
+{
+    border: 1px solid #76797C;
+    background-color: rgb(90, 102, 117);;
+    color: white;
+    padding: 5px;
+    opacity: 200;
+}
+
+QWidget
+{
+    color: #99ff99;
+    background-color: #31363b;
+    selection-background-color:#3daee9;
+    selection-color: #eff0f1;
+    background-clip: border;
+    border-image: none;
+}
+
+QWidget:item:selected {
+    background-color: #3daee9;
+}
+
+
+QTreeView { show-decoration-selected: 0;}
+QTreeView::item:selected {border: 1px solid #567dbc;}
+
+QTreeView::item:selected:active{
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6ea1f1, stop: 1 #567dbc);
+}
+
+QTreeView::item:selected:!active {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6b9be8, stop: 1 #577fbf);
+}
+
+QTreeView::branch:has-siblings:!adjoins-item {
+    border-image: url(tree-vline.png) 0;
+}
+
+QTreeView::branch:has-siblings:adjoins-item {
+    border-image: url(tree_branch_more.png) 0;
+}
+
+QTreeView::branch:!has-children:!has-siblings:adjoins-item {
+    border-image: url(tree_branch_end.png) 0;
+}
+
+QTreeView::branch:has-children:!has-siblings:closed,
+QTreeView::branch:closed:has-children:has-siblings {
+        border-image: none;
+        image: url(tree_collapsed.png);
+}
+
+QTreeView::branch:open:has-children:!has-siblings,
+QTreeView::branch:open:has-children:has-siblings  {
+        border-image: none;
+        image: url(tree_expanded.png);
+}
+
+QDoubleSpinBox::focus { background-color:#3136ab; }
+
+
+QCheckBox { spacing: 5px;}
+
+QCheckBox::indicator {
+    width: 40px;
+    height: 20px;
+}
+
+QCheckBox::indicator:unchecked { image: url(./switch/switch_off.png);}
+QCheckBox::indicator:checked { image: url(./switch/switch_on.png);}
+
+
+
+
+
+
+
+
