@@ -10,5 +10,7 @@ IC operation and control applications
 
 ## requirements:
 * python3+, but most upps will start with python2.7+
+* a set of IC-specific modules required
+
 * ddm - PyQt, cothread, pycx4
-* mode_ctrl 
+* mode_ctrl -PyQt, cothread, pycx4

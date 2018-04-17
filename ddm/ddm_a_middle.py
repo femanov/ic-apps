@@ -4,7 +4,7 @@ import cothread
 
 from PyQt4.QtGui import *
 from submachines import *
-from ic_settings.cx import *
+from settings.cx import *
 
 
 # class RingInEx(QMainWindow):
