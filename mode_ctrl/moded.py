@@ -14,14 +14,18 @@ from acc_ctl.mode_ser import ModesServer
 from acc_ctl.k500modes import remag_devs, remag_srv
 from acc_ctl.magwalker import MagWalker
 
-from acc_db.db import *
+from settings.db import mode_db_cfg
+from acc_db.mode_db import ModesDB
+
 from acc_db.mode_cache import SysCache, ModeCache
 
 
 class ModeDeamon:
     def __init__(self):
-        self.db = acc_db()
-        self.db_chans = self.db.mode_chans()
+        self.db = ModesDB(**mode_db_cfg)
+        ans = self.db.mode_chans()
+        self.db_chans = [list(c) for c in ans]
+
         self.cind = {}
 
         # db cols: protocol, name, fullchan_id

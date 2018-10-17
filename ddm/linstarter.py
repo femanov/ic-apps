@@ -1,12 +1,20 @@
 
 from PyQt5.QtCore import QObject, pyqtSignal
-import cothread.catools as catools
+import pycx4.pycda as cda
 
 runmodes = {
     'continous': 0,
     'counter':   1
 }
 
+#CX version names:
+# syn_ie4.mode
+# syn_ie4.re_bum
+# syn_ie4.bum_start
+# syn_ie4.bum_stop
+# syn_ie4.ie_bum
+# syn_ie4.bum_going
+# syn_ie4.lam_sig
 
 class LinStarter(QObject):
     runmodeChanged = pyqtSignal(int)
@@ -26,19 +34,16 @@ class LinStarter(QObject):
         self.nevents = 0  # inctementing when counter cycle ends
         self.nshots = 0  # number of requested shots
 
+        # catools.camonitor("ic.linac.shotCount", self.shotsLeftUpdate, datatype=int)
+        # catools.camonitor("ic.linac.shotCycle", self.neventsUpdate, datatype=int)
+        # catools.camonitor("ic.linac.runStatus", self.statusUpdate, datatype=int)
 
-        # pre-connect PV's
-        self.pvs_connect = [
-            "ic.linac.runmode",
-            "ic.linac.shotNum",
-            "ic.linac.runCounter",
-            "ic.linac.stopCounter"
-        ]
+        self.c_runmode = cda.DChan('syn_ie4.mode')
+        self.c_start = cda.DChan('syn_ie4.bum_start')
+        self.c_stop = cda.DChan('syn_ie4.bum_stop')
+        self.c_runmode = cda.DChan('syn_ie4.mode')
 
-        catools.connect(self.pvs_connect)
-        catools.camonitor("ic.linac.shotCount", self.shotsLeftUpdate, datatype=int)
-        catools.camonitor("ic.linac.shotCycle", self.neventsUpdate, datatype=int)
-        catools.camonitor("ic.linac.runStatus", self.statusUpdate, datatype=int)
+
 
     def shotsLeftUpdate(self, value):
         self.shootsLeft = value
