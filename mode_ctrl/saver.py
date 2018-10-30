@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 
 import time
-#import sys
 #import datetime
 
 from aux import str2u
-from aux.Qt import QtCore, QtGui, uic, QtWidgets
+from aux.Qt import QtCore, QtGui, QtWidgets
 from acc_db.mode_list import ModeListFull
 from acc_db.sys_tree import SysTree
 from acc_db.chan_kinds import KindTable

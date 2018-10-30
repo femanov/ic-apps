@@ -1,5 +1,7 @@
+
 from PyQt5.QtCore import QObject, pyqtSignal
-import cothread.catools as catools
+import pycx4.qcda as cda
+
 
 
 class Extractor(QObject):
@@ -22,12 +24,13 @@ class Extractor(QObject):
             "ic.extractor.run",
             "ic.extractor.stop"
         ]
-        catools.connect(self.pvs_connect)
+        # catools.connect(self.pvs_connect)
+        # catools.camonitor("ic.extractor.eventCount", self.eventUpdate, datatype=int)
+        # catools.camonitor("ic.extractor.status", self.statusUpdate, datatype=int)
+        # catools.camonitor("ic.syn.xfer.mask.rbv", self.maskUpdate, datatype=int)
+        # catools.camonitor("ic.extractor.clockSrc", self.clockSrcUpdate, datatype=int)
 
-        catools.camonitor("ic.extractor.eventCount", self.eventUpdate, datatype=int)
-        catools.camonitor("ic.extractor.status", self.statusUpdate, datatype=int)
-        catools.camonitor("ic.syn.xfer.mask.rbv", self.maskUpdate, datatype=int)
-        catools.camonitor("ic.extractor.clockSrc", self.clockSrcUpdate, datatype=int)
+
 
     def eventUpdate(self, value):
         self.eventCount = value
