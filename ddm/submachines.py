@@ -4,14 +4,6 @@ import cothread.catools as catools
 import pycx4.qcda as cda
 import acc_ctl.modes as modes
 
-#IC modes
-MODE_UNKN = 0
-MODE_EINJ = 1
-MODE_EEXT = 2
-MODE_PINJ = 3
-MODE_PEXT = 4
-
-
 
 class linStarter(QObject):
 
