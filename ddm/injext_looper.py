@@ -71,6 +71,12 @@ class InjExtLoop(QObject):
         self.c_extr_train_interval = cda.DChan('cxhw:0.ddm.extr_train_interval')
         self.c_extr_train_interval.valueMeasured.connect(self.train_interval_update)
 
+        # event channels
+        self.c_injected = cda.DChan('cxhw:0.ddm.injected')
+        self.c_extracted = cda.DChan('cxhw:0.ddm.extracted')
+
+
+
     def train_interval_update(self, chan):
         if chan.val > 0:
             self.extractor.set_training_interval(chan.val)
@@ -139,6 +145,7 @@ class InjExtLoop(QObject):
         #     self.run_state()
 
     def __idle(self):
+        print('idle state')
         pass
 
     def __preinject(self):
@@ -151,6 +158,7 @@ class InjExtLoop(QObject):
         self.linStarter.start()
 
     def __injected(self):
+        self.c_injected.setValue(1)
         if self.ic_runmode in {"single-cycle", "auto-cycle"}:
             #self.next_state()
             self.timer.singleShot(50, self.next_state)
@@ -163,6 +171,7 @@ class InjExtLoop(QObject):
         self.extractor.extract()
 
     def __extracted(self):
+        self.c_extracted.setValue(1)
         if self.ic_runmode == "auto-cycle":
             self.state = "preinject"
             self.run_state()

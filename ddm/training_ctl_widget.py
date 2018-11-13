@@ -28,13 +28,3 @@ class TrainingCtlW(QtWidgets.QWidget):
         self.cb_run = CXCheckBox(cname='cxhw:0.ddm.extr_train')
         self.grid.addWidget(self.cb_run, 1, 3)
 
-
-    # def run_proc(self, state):
-    #     if state:
-    #         print("starting")
-    #         self.extr.start_training(self.sb_interval.value())
-    #     else:
-    #         self.extr.stop_training()
-    #
-    # def training_stopped_proc(self):
-    #     self.cb_run.setValue(False)
