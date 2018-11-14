@@ -64,6 +64,7 @@ class InjExtLoop(QObject):
         # option-command channels
         self.c_particles = cda.StrChan('cxhw:0.ddm.particles', on_update=True)
         self.c_particles.valueMeasured.connect(self.particles_update)
+        self.c_particles.setValue(self.particles)
 
         self.c_extr_train = cda.DChan('cxhw:0.ddm.extr_train')
         self.c_extr_train.valueMeasured.connect(self.train_proc)
@@ -145,8 +146,10 @@ class InjExtLoop(QObject):
     def __preinject(self):
         print("__preinject")
         if self.req_particles is not None:
-            self.psrticles = self.req_particles
+            self.particles = self.req_particles
             self.req_particles = None
+            print("particles updated to: ", self.particles)
+
         mode = self.modes[self.particles][0]  # 0 - injection
         self.modeCtl.load_marked(mode, self.mode_subsys, ['rw'])
 
