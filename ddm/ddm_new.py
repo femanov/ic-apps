@@ -6,7 +6,7 @@ from fwidgets.cx_spinbox import CXSpinBox
 from fwidgets.cx_checkbox import CXCheckBox
 from fwidgets.cx_pushbutton import CXPushButton
 from fwidgets.cx_led import CXEventLed
-
+from fwidgets.cx_combobox import CXTextComboBox
 
 from training_ctl_widget import TrainingCtlW
 
@@ -39,12 +39,15 @@ class InjExtCtl(QtWidgets.QWidget):
         self.sb_eshots = CXSpinBox(cname='cxhw:0.ddm.pshots')
         self.grid.addWidget(self.sb_eshots, 1, 3)
 
+        self.grid.addWidget(QtWidgets.QLabel("particles"), 2, 0)
+        self.cb_particles = CXTextComboBox(cname='cxhw:0.ddm.particles', values=['e', 'p'])
+        self.grid.addWidget(self.cb_particles, 2, 1)
 
         self.b_inject = CXPushButton('Inject', cname='cxhw:0.ddm.inject')
-        self.grid.addWidget(self.b_inject, 2, 0)
+        self.grid.addWidget(self.b_inject, 2, 2)
 
         self.b_extract = CXPushButton('Extract', cname='cxhw:0.ddm.extract')
-        self.grid.addWidget(self.b_extract, 2, 1)
+        self.grid.addWidget(self.b_extract, 2, 3)
 
         self.b_round = CXPushButton('Round', cname='cxhw:0.ddm.nround')
         self.grid.addWidget(self.b_round, 3, 0)

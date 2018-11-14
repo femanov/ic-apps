@@ -138,18 +138,15 @@ class InjExtLoop(QObject):
             self.state = state_names[ns_ind]
             self.run_state()
 
-        # if self.state == 'injected' and self.ic_runmode in {"single-cycle", "auto-cycle"}:
-        #     self.next_state()
-        # if ns_ind == len(state_names) and self.ic_runmode == "auto-cycle":
-        #     self.state = "preinject"
-        #     self.run_state()
-
     def __idle(self):
         print('idle state')
         pass
 
     def __preinject(self):
         print("__preinject")
+        if self.req_particles is not None:
+            self.psrticles = self.req_particles
+            self.req_particles = None
         mode = self.modes[self.particles][0]  # 0 - injection
         self.modeCtl.load_marked(mode, self.mode_subsys, ['rw'])
 
