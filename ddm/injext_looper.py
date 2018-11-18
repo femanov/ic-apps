@@ -89,7 +89,6 @@ class InjExtLoop(QObject):
         if chan.val and self.ic_runmode == 'idle':
             self.extractor.start_training()
 
-
     def particles_update(self, chan):
         if self.particles == chan.val or chan.val not in {'e', 'p'}:
             return
