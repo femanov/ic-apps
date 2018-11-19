@@ -90,6 +90,7 @@ class InjExtLoop(QObject):
             self.extractor.start_training()
 
     def particles_update(self, chan):
+        print("chan update:", chan.val)
         if self.particles == chan.val or chan.val not in {'e', 'p'}:
             return
         if self.ic_runmode == 'idle':
@@ -108,7 +109,7 @@ class InjExtLoop(QObject):
         if sn == "stop":
             self.stop()
             return
-        if sn == "linrun":
+        if sn == "inject":
             self.inject()
             return
         if sn == "extract":
@@ -173,7 +174,7 @@ class InjExtLoop(QObject):
         self.c_extracted.setValue(1)
         if self.ic_runmode == "auto-cycle":
             self.state = "preinject"
-            self.run_state()
+            self.timer.singleShot(50, self.next_state)
 
 
     def setParticles(self, particles):
@@ -181,20 +182,20 @@ class InjExtLoop(QObject):
 
     # stop any operation
     def stop(self):
-        print('stop')
+        print('exec sstop')
         self.ic_runmode = 'idle'
         self.state = 'idle'
         self.linStarter.stop()
         self.extractor.stop()
 
     def inject(self):
-        print('inject')
+        print('exec inject')
         self.ic_runmode = "single-action"
         self.state = "preinject"
         self.run_state()
 
     def extract(self):
-        print('extract')
+        print(' exec extract')
         # check if something injected
         self.ic_runmode = "single-action"
         self.state = "preextract"
