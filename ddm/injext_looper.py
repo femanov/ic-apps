@@ -66,15 +66,15 @@ class InjExtLoop(QObject):
         self.c_particles.valueMeasured.connect(self.particles_update)
         self.c_particles.setValue(self.particles)
 
-        self.c_extr_train = cda.DChan('cxhw:0.ddm.extr_train')
+        self.c_extr_train = cda.DChan('cxhw:0.ddm.extr_train',  on_update=True)
         self.c_extr_train.valueMeasured.connect(self.train_proc)
 
-        self.c_extr_train_interval = cda.DChan('cxhw:0.ddm.extr_train_interval')
+        self.c_extr_train_interval = cda.DChan('cxhw:0.ddm.extr_train_interval', on_update=True)
         self.c_extr_train_interval.valueMeasured.connect(self.train_interval_update)
 
         # event channels
-        self.c_injected = cda.DChan('cxhw:0.ddm.injected')
-        self.c_extracted = cda.DChan('cxhw:0.ddm.extracted')
+        self.c_injected = cda.DChan('cxhw:0.ddm.injected', on_update=True)
+        self.c_extracted = cda.DChan('cxhw:0.ddm.extracted', on_update=True)
 
 
 
@@ -150,8 +150,9 @@ class InjExtLoop(QObject):
             self.req_particles = None
             print("particles updated to: ", self.particles)
 
-        mode = self.modes[self.particles][0]  # 0 - injection
-        self.modeCtl.load_marked(mode, self.mode_subsys, ['rw'])
+        inj_mode = self.modes[self.particles][0]  # 0 - injection
+        print("loading inj_mode: ", inj_mode)
+        self.modeCtl.load_marked(inj_mode, self.mode_subsys, ['rw'])
 
     def __inject2(self):
         print("__inject2")
@@ -161,11 +162,12 @@ class InjExtLoop(QObject):
         self.c_injected.setValue(1)
         if self.ic_runmode in {"single-cycle", "auto-cycle"}:
             #self.next_state()
-            self.timer.singleShot(50, self.next_state)
+            self.timer.singleShot(100, self.next_state)
 
     def __preextract(self):
-        mode = self.modes[self.particles][1]  # 1 - extraction modes
-        self.modeCtl.load_marked(mode, self.mode_subsys, ['rw'])
+        ext_mode = self.modes[self.particles][1]  # 1 - extraction modes
+        print("loading ext_mode: ", ext_mode, self.particles)
+        self.modeCtl.load_marked(ext_mode, self.mode_subsys, ['rw'])
 
     def __extract2(self):
         self.extractor.extract()
@@ -174,7 +176,7 @@ class InjExtLoop(QObject):
         self.c_extracted.setValue(1)
         if self.ic_runmode == "auto-cycle":
             self.state = "preinject"
-            self.timer.singleShot(50, self.next_state)
+            self.timer.singleShot(100, self.run_state)
 
 
     def setParticles(self, particles):
