@@ -5,7 +5,7 @@ from math import fabs
 import numpy as np
 
 from aux import str2u
-from aux.Qt import QtCore
+from aQt import QtCore
 from aux.service_daemon import Service
 
 import pycx4.qcda as cda
@@ -14,15 +14,43 @@ from acc_ctl.mode_ser import ModesServer
 from acc_ctl.k500modes import remag_devs, remag_srv
 from acc_ctl.magwalker import MagWalker
 
-from settings.db import mode_db_cfg
+from settings.db import mode_db_cfg, acc_cfg
 from acc_db.mode_db import ModesDB
+from acc_db.db import AccConfig
+
 
 from acc_db.mode_cache import SysCache, ModeCache
 
 
+class cx_native_loop_bind():
+    def __init__(self):
+        pass
+
+class cx_qt_loop_bing():
+    def __init__(self):
+        pass
+
+
+
 class ModeDeamon:
     def __init__(self):
+        self.cfg_db = AccConfig(**acc_cfg)
+        self.cfg_db.execute("SELECT protocol FROM protocols_in_use()")
+        ans = self.cfg_db.cur.fetchall()
+        self.protocols = [p[0] for p in ans]
+        print(self.protocols)
+        if len(self.protocols) == 1:
+            print("Single protocol is in use. Will use native main loop")
+            global single_protocol
+            single_protocol = self.protocols[0]
+        else:
+            print("There are few protocols. Let's use some common main loop")
+
+
+        sys.exit()
+
         self.db = ModesDB(**mode_db_cfg)
+
         ans = self.db.mode_chans()
         self.db_chans = [list(c) for c in ans]
 
@@ -32,7 +60,7 @@ class ModeDeamon:
         for x in self.db_chans:
             chan = None
             if x[0] == 'cx':
-                chan = cda.DChan(str(x[1]))
+                chan = cda.DChan(str(x[1]))#, on_update=True)
                 chan.valueMeasured.connect(self.cxNewData)
             if x[0] == 'EPICS':
                 chan = catools.camonitor(str(x[1]), self.epicsNewData, format=catools.FORMAT_TIME)

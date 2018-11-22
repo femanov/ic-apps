@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import time
-#import datetime
 
 from aux import str2u
 from aux.Qt import QtCore, QtGui, QtWidgets
