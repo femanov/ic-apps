@@ -1,5 +1,5 @@
 
-from PyQt5.QtCore import QObject, pyqtSignal
+from aQt.QtCore import QObject, pyqtSignal
 import pycx4.qcda as cda
 
 

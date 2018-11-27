@@ -47,6 +47,7 @@ class InjExtLoop(QObject):
         ]
 
         # output channels
+        self.c_state = cda.StrChan('cxhw:0.ddm.state', on_update=True)
         self.c_stateMsg = cda.StrChan('cxhw:0.ddm.stateMsg', on_update=True)
 
         # command channels
@@ -105,7 +106,6 @@ class InjExtLoop(QObject):
         if chan.first_cycle:
             return
         sn = chan.short_name()
-        print(sn)
         if sn == "stop":
             self.stop()
             return
@@ -121,9 +121,8 @@ class InjExtLoop(QObject):
         if sn == "autorun":
             self.exec_burst()
 
-
     def run_state(self):
-        print('run_state_call, state: ', self.state)
+        self.c_state.setValue(self.state)
         if self.ic_runmode == 'idle':
             return
         s_ind = state_names.index(self.state)
@@ -131,7 +130,6 @@ class InjExtLoop(QObject):
         self.states[s_ind]()
 
     def next_state(self):
-        print('next_state_call')
         s_ind = state_names.index(self.state)
         ns_ind = s_ind + 1
 
@@ -140,33 +138,27 @@ class InjExtLoop(QObject):
             self.run_state()
 
     def __idle(self):
-        print('idle state')
         pass
 
     def __preinject(self):
-        print("__preinject")
         if self.req_particles is not None:
             self.particles = self.req_particles
             self.req_particles = None
             print("particles updated to: ", self.particles)
 
         inj_mode = self.modes[self.particles][0]  # 0 - injection
-        print("loading inj_mode: ", inj_mode)
         self.modeCtl.load_marked(inj_mode, self.mode_subsys, ['rw'])
 
     def __inject2(self):
-        print("__inject2")
         self.linStarter.start()
 
     def __injected(self):
         self.c_injected.setValue(1)
         if self.ic_runmode in {"single-cycle", "auto-cycle"}:
-            #self.next_state()
-            self.timer.singleShot(100, self.next_state)
+            self.timer.singleShot(50, self.next_state)
 
     def __preextract(self):
         ext_mode = self.modes[self.particles][1]  # 1 - extraction modes
-        print("loading ext_mode: ", ext_mode, self.particles)
         self.modeCtl.load_marked(ext_mode, self.mode_subsys, ['rw'])
 
     def __extract2(self):
@@ -184,33 +176,28 @@ class InjExtLoop(QObject):
 
     # stop any operation
     def stop(self):
-        print('exec sstop')
         self.ic_runmode = 'idle'
         self.state = 'idle'
         self.linStarter.stop()
         self.extractor.stop()
 
     def inject(self):
-        print('exec inject')
         self.ic_runmode = "single-action"
         self.state = "preinject"
         self.run_state()
 
     def extract(self):
-        print(' exec extract')
         # check if something injected
         self.ic_runmode = "single-action"
         self.state = "preextract"
         self.run_state()
 
     def exec_round(self):
-        print('execRound')
         self.ic_runmode = "single-cycle"
         self.state = "preinject"
         self.run_state()
 
     def exec_burst(self):
-        print('execBurst')
         self.ic_runmode = "auto-cycle"
         self.state = "preinject"
         self.run_state()

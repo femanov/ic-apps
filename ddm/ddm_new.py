@@ -47,7 +47,8 @@ class InjExtCtl(BaseGridW):
         self.grid.addWidget(self.sb_eshots, 1, 3)
 
         self.grid.addWidget(QLabel("particles"), 2, 0)
-        self.cb_particles = CXTextComboBox(cname='cxhw:0.ddm.particles', values=['e', 'p'])
+        self.cb_particles = CXTextComboBox(cname='cxhw:0.ddm.particles', values=['e', 'p'],
+                                           icons=['img/electron.png', 'img/positron.png'])
         self.grid.addWidget(self.cb_particles, 2, 1)
 
         self.b_inject = CXPushButton('Inject', cname='cxhw:0.ddm.inject')

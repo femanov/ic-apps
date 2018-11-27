@@ -1,22 +1,26 @@
 #!/usr/bin/env python3
-
-from PyQt5 import QtCore
-
-# remove this when demonization added
-import signal
-signal.signal(signal.SIGINT, signal.SIG_DFL)
-
-
-
+import sys
+from aux.service_daemon import Service
+from aQt.QtCore import QCoreApplication
 from injext_looper import InjExtLoop
 
-import sys
+# remove this when demonization added
+# import signal
+#signal.signal(signal.SIGINT, signal.SIG_DFL)
 
 
-app = QtCore.QCoreApplication(sys.argv)
+
+def clean():
+    print('exiting doom\'s day machine')
+    app.quit()
+    sys.stdout.flush()
+
+def run_main():
+    global app
+    app = QCoreApplication(sys.argv)
+    injext_loop = InjExtLoop()
+    app.exec_()
 
 
-injext_loop = InjExtLoop()
+ddmd = Service("ddmd", run_main, clean)
 
-
-app.exec_()
