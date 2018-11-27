@@ -8,6 +8,7 @@ from fwidgets.cx_checkbox import CXCheckBox
 from fwidgets.cx_pushbutton import CXPushButton
 from fwidgets.cx_led import CXEventLed
 from fwidgets.cx_combobox import CXTextComboBox
+from fwidgets.cx_lineedit import CXLineEdit
 
 from training_ctl_widget import TrainingCtlW
 
@@ -84,6 +85,10 @@ class InjExtState(BaseGridW):
         self.grid.addWidget(QLabel("extracted"), 2, 2, Qt.AlignRight)
         self.ext_led = CXEventLed(cname='cxhw:0.ddm.extracted')
         self.grid.addWidget(self.ext_led, 2, 3, Qt.AlignLeft)
+
+        self.grid.addWidget(QLabel("state"), 3, 0)
+        self.sb_nshots = CXLineEdit(cname='cxhw:0.ddm.state', readonly=True)
+        self.grid.addWidget(self.sb_nshots, 3, 1)
 
 
 class K500State(BaseGridW):
