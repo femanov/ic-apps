@@ -12,6 +12,8 @@ from fwidgets.cx_lineedit import CXLineEdit
 
 from training_ctl_widget import TrainingCtlW
 
+from acc_ctl.mode_defs import mode_colors
+
 
 class Line(QFrame):
     def __init__(self, *args):
@@ -87,8 +89,12 @@ class InjExtState(BaseGridW):
         self.grid.addWidget(self.ext_led, 2, 3, Qt.AlignLeft)
 
         self.grid.addWidget(QLabel("state"), 3, 0)
-        self.sb_nshots = CXLineEdit(cname='cxhw:0.ddm.state', readonly=True)
-        self.grid.addWidget(self.sb_nshots, 3, 1)
+        self.state_line = CXLineEdit(cname='cxhw:0.ddm.state', readonly=True)
+        self.grid.addWidget(self.state_line, 3, 1)
+
+        self.grid.addWidget(QLabel("runmode"), 4, 0)
+        self.runmode_line = CXLineEdit(cname='cxhw:0.ddm.icrunmode', readonly=True)
+        self.grid.addWidget(self.runmode_line, 4, 1)
 
 
 class K500State(BaseGridW):
@@ -100,6 +106,31 @@ class K500State(BaseGridW):
         self.grid.addWidget(QLabel("mode"), 1, 0)
         self.cb_particles = CXTextComboBox(cname='cxhw:0.k500.modet', values=['e2v2', 'p2v2', 'e2v4', 'p2v4'])
         self.grid.addWidget(self.cb_particles, 1, 1)
+
+class PUSwitch(BaseGridW):
+    def __init__(self, parent=None):
+        super(PUSwitch, self).__init__(parent)
+
+        self.grid.addWidget(QLabel("Particles&users switching"), 0, 0, 1, 2, Qt.AlignHCenter)
+
+        self.b_e2v4 = CXPushButton('e2v4', cname='cxhw:0.ddm.e2v4')
+        self.grid.addWidget(self.b_e2v4, 1, 0)
+        self.b_e2v4.setStyleSheet('QPushButton {background-color: ' + mode_colors['e2v4'] + '; }')
+
+
+        self.b_p2v4 = CXPushButton('p2v4', cname='cxhw:0.ddm.p2v4')
+        self.grid.addWidget(self.b_p2v4, 2, 0)
+        self.b_p2v4.setStyleSheet('QPushButton {background-color: ' + mode_colors['p2v4'] + '; }')
+
+
+        self.b_e2v2 = CXPushButton('e2v2', cname='cxhw:0.ddm.e2v2')
+        self.grid.addWidget(self.b_e2v2, 1, 1)
+        self.b_e2v2.setStyleSheet('QPushButton {background-color: ' + mode_colors['e2v2'] + '; }')
+
+
+        self.b_p2v2 = CXPushButton('p2v2', cname='cxhw:0.ddm.p2v2')
+        self.grid.addWidget(self.b_p2v2, 2, 1)
+        self.b_p2v2.setStyleSheet('QPushButton {background-color: ' + mode_colors['p2v2'] + '; }')
 
 
 class DDMWidget(BaseGridW):
@@ -123,6 +154,11 @@ class DDMWidget(BaseGridW):
 
         self.k500_st = K500State()
         self.grid.addWidget(self.k500_st, 6, 0)
+
+        self.grid.addWidget(Line(), 7, 0)
+
+        self.pu_sw = PUSwitch()
+        self.grid.addWidget(self.pu_sw, 8, 0)
 
         #self.grid.addWidget(QLabel("Automatic Injection/extraction control"), 2, 0, 1, 4, Qt.AlignHCenter)
 
