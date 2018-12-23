@@ -5,8 +5,7 @@ from math import fabs
 import numpy as np
 
 from aux import str2u
-from aQt import QtCore
-from aux.service_daemon import Service
+from aux.service_daemon import Service, CothreadQtService
 
 import pycx4.qcda as cda
 
@@ -18,50 +17,26 @@ from settings.db import mode_db_cfg, acc_cfg
 from acc_db.mode_db import ModesDB
 from acc_db.db import AccConfig
 
-
 from acc_db.mode_cache import SysCache, ModeCache
-
-
-class cx_native_loop_bind():
-    def __init__(self):
-        pass
-
-class cx_qt_loop_bing():
-    def __init__(self):
-        pass
-
 
 
 class ModeDeamon:
     def __init__(self):
-        self.cfg_db = AccConfig(**acc_cfg)
-        self.cfg_db.execute("SELECT protocol FROM protocols_in_use()")
-        ans = self.cfg_db.cur.fetchall()
-        self.protocols = [p[0] for p in ans]
-        print(self.protocols)
-        if len(self.protocols) == 1:
-            print("Single protocol is in use. Will use native main loop")
-            global single_protocol
-            single_protocol = self.protocols[0]
-        else:
-            print("There are few protocols. Let's use some common main loop")
-
-
-        sys.exit()
-
         self.db = ModesDB(**mode_db_cfg)
 
         ans = self.db.mode_chans()
         self.db_chans = [list(c) for c in ans]
 
         self.cind = {}
+        self.avaliable_cind = {}
 
         # db cols: protocol, name, fullchan_id
         for x in self.db_chans:
             chan = None
             if x[0] == 'cx':
                 chan = cda.DChan(str(x[1]))#, on_update=True)
-                chan.valueMeasured.connect(self.cxNewData)
+                chan.valueMeasured.connect(self.cx_new_data)
+                chan.resolve.connect(self.cx_resolve)
             if x[0] == 'EPICS':
                 chan = catools.camonitor(str(x[1]), self.epicsNewData, format=catools.FORMAT_TIME)
             x += [0, 0.0, 0]  # cols: protocol, name, fullchan_id, utime, value, available
@@ -91,9 +66,20 @@ class ModeDeamon:
         for k in self.walkers:
             self.walkers[k].done.connect(self.mode_ser.walkerDone)
 
-    def cxNewData(self, chan):
+    def cx_resolve(self, chan):
         row = self.cind[chan.name][1]
-        row[-3], row[-2], row[-1] = chan.time, chan.val, 1
+        row[-1] = chan.rslv_stat
+        if chan.rslv_stat == cda.RSLVSTAT_NOTFOUND or chan.rslv_stat == cda.RSLVSTAT_SEARCHING:
+            if chan.name in self.avaliable_cind:
+                del self.avaliable_cind[chan.name]
+        elif chan.rslv_stat == cda.RSLVSTAT_FOUND:
+            self.avaliable_cind[chan.name] = self.cind[chan.name]
+
+    def cx_new_data(self, chan):
+        #print('data update')
+        row = self.cind[chan.name][1]
+        row[-3], row[-2] = chan.time, chan.val
+        #print('end data update')
 
     def epicsNewData(self, value):
         row = self.cind[value.name][1]
@@ -112,19 +98,18 @@ class ModeDeamon:
         return True
 
     def applyMode(self, mode_data):
+        print('apply node')
         # mode_data cols: protocol, chan_name, value
-        loaded_count, ignored_count, nochange_count, unavailable_count, unknown_count = 0, 0, 0, 0, 0
+        loaded_count, nochange_count, na_count, unknown_count = 0, 0, 0, 0
         epics_chans, epics_values = [], []
 
         for row in mode_data:
-            if row[1] not in self.cind:
-                ignored_count += 1
+            c_row = self.avaliable_cind.get(row[1], None)
+            if c_row is None:
+                na_count += 1
+                print('not avaliable:', row[1])
                 continue
-            cdata = self.cind[row[1]][1]
-            if cdata[-1] == 0:
-                unavailable_count += 1
-                print("unavaliable:", cdata)
-                continue
+            cdata = c_row[1]
             if row[-1] == cdata[-2]:
                 nochange_count += 1
                 continue
@@ -149,9 +134,11 @@ class ModeDeamon:
             print('some epics pv problems', e_ok)
             pass
 
-        msg = 'loaded %d, ignored %d, nochange %d, unavail %d, unknown %d' % \
-              (loaded_count, ignored_count, nochange_count, unavailable_count, unknown_count)
+        msg = 'loaded %d, nochange %d, unavail %d, unknown %d' % \
+              (loaded_count, nochange_count, na_count, unknown_count)
         return msg
+        print('apply node')
+
 
     def loadMode(self, mode_id, syslist, types):
         if not self.check_syslist(syslist) or not types:
@@ -186,27 +173,48 @@ class ModeDeamon:
                 vs.append(row[2])
             self.walkers[key].run_list(np.array(vs))
 
-
     def dump_state(self):
         dump_file = open("/var/tmp/moded_dump", "w")
         for x in self.db_chans:
             dump_file.write(str(x) + "\n")
 
 
-def clean():
-    m.dump_state()
-    app.quit()
-    sys.stdout.flush()
+class ModeService(CothreadQtService):
+    def main(self):
+        global QtCore, catools, cothread, signal
+        from aQt import QtCore
+        import cothread
+        from cothread import catools
 
-def run_main():
-    global catools, app, m
-    import cothread
-    from cothread import catools
+        signal = QtCore.pyqtSignal
+        self.m = ModeDeamon()
 
-    a = QtCore.QCoreApplication(sys.argv)
-    app = cothread.iqt()
-    m = ModeDeamon()
-    cothread.WaitForQuit()
+    def clean_proc(self):
+        self.m.dump_state()
 
 
-moded = Service("moded", run_main, clean)
+
+cfg_db = AccConfig(**acc_cfg)
+cfg_db.execute("SELECT protocol FROM protocols_in_use()")
+ans = cfg_db.cur.fetchall()
+protocols = [p[0] for p in ans]
+print(protocols)
+if len(protocols) == 1:
+    print("Single protocol is in use. Will use native main loop")
+    single_protocol = protocols[0]
+else:
+    print("There are few protocols. Let's use some common main loop")
+
+
+moded = ModeService("moded")
+
+# from aQt import QtCore
+# import cothread
+# from cothread import catools
+#
+# app = QtCore.QCoreApplication(sys.argv)
+# cothread.iqt()
+#
+# m = ModeDeamon()
+#
+# cothread.WaitForQuit()
