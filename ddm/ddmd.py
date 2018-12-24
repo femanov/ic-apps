@@ -9,7 +9,7 @@ class DDMService(CothreadQtService):
         injext_loop = InjExtLoop()
 
     def clean(self):
-        print('exiting doom\'s day machine')
+        self.log_str('exiting doom\`s day machine')
 
 
 ddmd = DDMService("ddmd")
