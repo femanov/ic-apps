@@ -76,15 +76,13 @@ class ModeDeamon:
             self.avaliable_cind[chan.name] = self.cind[chan.name]
 
     def cx_new_data(self, chan):
-        #print('data update')
         row = self.cind[chan.name][1]
         row[-3], row[-2] = chan.time, chan.val
-        #print('end data update')
 
     def epicsNewData(self, value):
         row = self.cind[value.name][1]
         time = int(value.raw_stamp[0] * 1000000 + value.raw_stamp[1] / 1000)
-        row[-3], row[-2], row[-1] = time, float(value), 1
+        row[-3], row[-2], row[-1] = time, float(value), 2
 
     def saveMode(self, author, comment):
         mode_id = self.db.save_mode(str2u(author), str2u(comment), self.db_chans)
@@ -98,7 +96,6 @@ class ModeDeamon:
         return True
 
     def applyMode(self, mode_data):
-        print('apply node')
         # mode_data cols: protocol, chan_name, value
         loaded_count, nochange_count, na_count, unknown_count = 0, 0, 0, 0
         epics_chans, epics_values = [], []
@@ -107,7 +104,6 @@ class ModeDeamon:
             c_row = self.avaliable_cind.get(row[1], None)
             if c_row is None:
                 na_count += 1
-                print('not avaliable:', row[1])
                 continue
             cdata = c_row[1]
             if row[-1] == cdata[-2]:
@@ -137,7 +133,6 @@ class ModeDeamon:
         msg = 'loaded %d, nochange %d, unavail %d, unknown %d' % \
               (loaded_count, nochange_count, na_count, unknown_count)
         return msg
-        print('apply node')
 
 
     def loadMode(self, mode_id, syslist, types):
@@ -154,7 +149,6 @@ class ModeDeamon:
         mode_data = self.mode_caches[mark_id].extract(syslist)
         msg = self.applyMode(mode_data)
         self.mode_ser.markedLoaded(mark_id, msg)
-
 
     def markMode(self, mode_id, name, comment, author, mark_id):
         self.db.mark_mode(mode_id, name, comment, author, mark_id)
