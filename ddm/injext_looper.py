@@ -3,6 +3,7 @@ from PyQt5.QtCore import QObject, pyqtSignal, QTimer
 
 from linstarter import  LinStarter
 from extractor import Extractor
+from acc_ctl.k500modes import K500Director
 import pycx4.qcda as cda
 from acc_ctl.mode_ser import ModesClient
 
@@ -34,6 +35,8 @@ class InjExtLoop(QObject):
         self.linStarter = LinStarter()
         self.extractor = Extractor()
         self.modeCtl = ModesClient()
+        self.k500ctl = K500Director()
+
 
         self.mode_subsys = [37, 38, 39]
         self.modes = {

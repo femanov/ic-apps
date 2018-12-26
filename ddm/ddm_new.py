@@ -10,6 +10,7 @@ from fwidgets.cx_pushbutton import CXPushButton
 from fwidgets.cx_led import CXEventLed
 from fwidgets.cx_combobox import CXTextComboBox
 from fwidgets.cx_lineedit import CXLineEdit
+from fwidgets.cx_progressbar import CXProgressBar
 
 from training_ctl_widget import TrainingCtlW
 
@@ -141,6 +142,14 @@ class PUSwitch(BaseGridW):
         self.b_p2v2 = CXPushButton('-->p2v2', cname='cxhw:0.ddm.p2v2')
         self.grid.addWidget(self.b_p2v2, 3, 1)
         self.b_p2v2.setStyleSheet('QPushButton {background-color: ' + mode_colors['p2v2'] + '; }')
+
+        self.grid.addWidget(QLabel("current state"), 4, 0, 1, 2, Qt.AlignHCenter)
+
+        #self.grid.addWidget(QLabel("switching"), 5, 0, 1, 2, Qt.AlignHCenter)
+        self.sw_progress = CXProgressBar(cname='cxhw:0.k500.mode_progress')
+        self.grid.addWidget(self.sw_progress, 5, 0, 1, 2)
+        #self.mode_ind =
+
 
 
 class DDMWidget(BaseGridW):

@@ -104,6 +104,7 @@ class ModeDeamon:
             c_row = self.avaliable_cind.get(row[1], None)
             if c_row is None:
                 na_count += 1
+                print('unavaliable: ', row[1])
                 continue
             cdata = c_row[1]
             if row[-1] == cdata[-2]:
