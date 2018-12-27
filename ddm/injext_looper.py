@@ -89,15 +89,19 @@ class InjExtLoop(QObject):
         self.c_particles.valueMeasured.connect(self.particles_update)
         self.c_particles.setValue(self.particles)
 
-        self.c_extr_train = cda.DChan('cxhw:0.ddm.extr_train',  on_update=True)
+        self.c_extr_train = cda.IChan('cxhw:0.ddm.extr_train',  on_update=True)
         self.c_extr_train.valueMeasured.connect(self.train_proc)
 
         self.c_extr_train_interval = cda.DChan('cxhw:0.ddm.extr_train_interval', on_update=True)
         self.c_extr_train_interval.valueMeasured.connect(self.train_interval_update)
 
         # event channels
-        self.c_injected = cda.DChan('cxhw:0.ddm.injected', on_update=True)
-        self.c_extracted = cda.DChan('cxhw:0.ddm.extracted', on_update=True)
+        self.c_injected = cda.IChan('cxhw:0.ddm.injected', on_update=True)
+        self.c_extracted = cda.IChan('cxhw:0.ddm.extracted', on_update=True)
+
+        # beam current channels
+        self.c_beamcunr = cda.DChan('cxhw:0.dcct.beamcurrent', on_update=True)
+        self.c_extr_beamCur = cda.DChan('cxhw:0.dcct.ExtractionCurrent', on_update=True)
 
     def train_interval_update(self, chan):
         if chan.val > 0:
@@ -173,6 +177,7 @@ class InjExtLoop(QObject):
         self.modeCtl.load_marked(ext_mode, self.mode_subsys, ['rw'])
 
     def __extract2(self):
+        self.c_extr_beamCur.setValue(self.c_beamcunr.val)
         self.extractor.extract()
 
     def __extracted(self):

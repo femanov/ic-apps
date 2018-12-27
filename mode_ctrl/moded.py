@@ -68,12 +68,13 @@ class ModeDeamon:
 
     def cx_resolve(self, chan):
         row = self.cind[chan.name][1]
-        row[-1] = chan.rslv_stat
         if chan.rslv_stat == cda.RSLVSTAT_NOTFOUND or chan.rslv_stat == cda.RSLVSTAT_SEARCHING:
             if chan.name in self.avaliable_cind:
                 del self.avaliable_cind[chan.name]
+                row[-1] = 0
         elif chan.rslv_stat == cda.RSLVSTAT_FOUND:
             self.avaliable_cind[chan.name] = self.cind[chan.name]
+            row[-1] = 1
 
     def cx_new_data(self, chan):
         row = self.cind[chan.name][1]
