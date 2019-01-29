@@ -3,6 +3,7 @@ from PyQt5.QtCore import QObject, pyqtSignal, QTimer
 
 from linstarter import  LinStarter
 from extractor import Extractor
+from pu_switcher import PUSwitcher
 from acc_ctl.k500modes import K500Director
 import pycx4.qcda as cda
 from acc_ctl.mode_ser import ModesClient
@@ -12,9 +13,10 @@ particles = ["e", "p"]
 state_names = ["idle",
                "preinject", "inject", "injected",
                "preextract", "extract", "extracted",
-               "pu_switching"]
+               "pu_switching", "pu_switched"]
 stateMsg = ["Stopped!", "Preparing for injection", "Injecting", "Injection finished",
-            "Preparing for extraction", "Extracting", "Beam Extracted"]
+            "Preparing for extraction", "Extracting", "Beam Extracted",
+            "particle-users switching", "particle-users switched"]
 
 run_modes = ["idle", "single-action", "single-cycle", "auto-cycle"]
 
@@ -35,8 +37,7 @@ class InjExtLoop(QObject):
         self.linStarter = LinStarter()
         self.extractor = Extractor()
         self.modeCtl = ModesClient()
-        self.k500ctl = K500Director()
-
+        self.pu_ctl = PUSwitcher()
 
         self.mode_subsys = [37, 38, 39]
         self.modes = {
@@ -47,14 +48,15 @@ class InjExtLoop(QObject):
         self.modeCtl.markedReady.connect(self.next_state)
         self.linStarter.runDone.connect(self.next_state)
         self.extractor.extractionDone.connect(self.next_state)
-        self.timer = QTimer()
+        self.pu_ctl.switching_done.connect(self.next_state)
 
+        self.timer = QTimer()
 
         self.states = [
             self.__idle,
             self.__preinject, self.__inject2, self.__injected,
             self.__preextract, self.__extract2, self.__extracted,
-            self.__pu_switching
+            self.__pu_switching, self.__pu_switched
         ]
 
         # output channels
@@ -64,25 +66,11 @@ class InjExtLoop(QObject):
         self.c_icrunmode = cda.StrChan('cxhw:0.ddm.ICRunMode', on_update=True)
 
         # command channels
-        self.c_stop = cda.IChan('cxhw:0.ddm.stop', on_update=True)
-        self.c_inject = cda.IChan('cxhw:0.ddm.inject', on_update=True)
-        self.c_extract = cda.IChan('cxhw:0.ddm.extract', on_update=True)
-        self.c_nround = cda.IChan('cxhw:0.ddm.nround', on_update=True)
-        self.c_autorun = cda.IChan('cxhw:0.ddm.autorun', on_update=True)
-        self.c_stop.valueMeasured.connect(self.cmd_proc)
-        self.c_inject.valueMeasured.connect(self.cmd_proc)
-        self.c_extract.valueMeasured.connect(self.cmd_proc)
-        self.c_nround.valueMeasured.connect(self.cmd_proc)
-        self.c_autorun.valueMeasured.connect(self.cmd_proc)
-
-        self.c_e2v4 = cda.IChan('cxhw:0.ddm.e2v4', on_update=True)
-        self.c_p2v4 = cda.IChan('cxhw:0.ddm.p2v4', on_update=True)
-        self.c_e2v2 = cda.IChan('cxhw:0.ddm.e2v2', on_update=True)
-        self.c_p2v2 = cda.IChan('cxhw:0.ddm.p2v2', on_update=True)
-        self.c_e2v4.valueMeasured.connect(self.cmd_proc)
-        self.c_p2v4.valueMeasured.connect(self.cmd_proc)
-        self.c_e2v2.valueMeasured.connect(self.cmd_proc)
-        self.c_p2v2.valueMeasured.connect(self.cmd_proc)
+        self.cmds = ['stop', 'inject', 'extract', 'nround', 'autorun', 'e2v4', 'p2v4', 'e2v2', 'p2v2']
+        self.c_cmds = [cda.IChan('cxhw:0.ddm.' + x, on_update=True) for x in self.cmds]
+        for c in self.c_cmds:
+            c.valueMeasured.connect(self.cmd_proc)
+        print(self.c_cmds)
 
         # option-command channels
         self.c_particles = cda.StrChan('cxhw:0.ddm.particles', on_update=True)
@@ -122,8 +110,11 @@ class InjExtLoop(QObject):
             self.req_particles = chan.val
 
     def set_particles(self, p):
+        if self.particles == p:
+            return
         self.particles = p
         self.linStarter.set_particles(self.particles)
+        self.c_particles.setValue(p)
 
     def set_pu_mode(self, mode):
         if self.pu_mode == mode:
@@ -147,7 +138,6 @@ class InjExtLoop(QObject):
     def next_state(self):
         s_ind = state_names.index(self.state)
         ns_ind = s_ind + 1
-
         if ns_ind < len(state_names):
             self.state = state_names[ns_ind]
             self.run_state()
@@ -160,6 +150,9 @@ class InjExtLoop(QObject):
             self.set_particles(self.req_particles)
             self.req_particles = None
             print("particles updated to: ", self.particles)
+        if self.req_pu_mode is not None:
+            self.run_state('pu_switching')
+            return
 
         inj_mode = self.modes[self.particles][0]  # 0 - injection
         self.modeCtl.load_marked(inj_mode, self.mode_subsys, ['rw'])
@@ -187,40 +180,28 @@ class InjExtLoop(QObject):
             self.timer.singleShot(50, self.run_state)
 
     def __pu_switching(self):
-        pass
+        if self.req_pu_mode is None:
+            return
+        self.set_particles(self.req_pu_mode[0])
+        self.pu_ctl.switch_mode(self.req_pu_mode)
+
+    def __pu_switched(self):
+        if self.ic_runmode == "auto-cycle":
+            self.state = "preinject"
+            self.timer.singleShot(50, self.run_state)
+        else:
+            self.state = 'idle'
+            self.run_state()
+
 
     # commands
     def cmd_proc(self, chan):
         if chan.first_cycle:
             return
         sn = chan.short_name()
-        if sn == "stop":
-            self.stop()
-            return
-        if sn == "inject":
-            self.inject()
-            return
-        if sn == "extract":
-            self.extract()
-            return
-        if sn == "nround":
-            self.exec_round()
-            return
-        if sn == "autorun":
-            self.exec_burst()
-            return
-        if sn == "e2v4":
-            self.e2v4()
-            return
-        if sn == "p2v4":
-            self.p2v4()
-            return
-        if sn == "e2v2":
-            self.e2v2()
-            return
-        if sn == "p2v2":
-            self.p2v2()
-            return
+        print(sn)
+        getattr(self, sn)()
+
 
     # stop any operation
     def set_runmode(self, runmode):
@@ -242,11 +223,11 @@ class InjExtLoop(QObject):
         self.set_runmode("single-action")
         self.run_state('preextract')
 
-    def exec_round(self):
+    def nround(self):
         self.set_runmode("single-cycle")
         self.run_state('preinject')
 
-    def exec_burst(self):
+    def autorun(self):
         self.set_runmode("auto-cycle")
         self.run_state('preinject')
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from aQt.QtWidgets import QWidget, QGridLayout, QLabel, QFrame, QApplication
+from aQt.QtWidgets import QLabel, QApplication
 from aQt.QtCore import Qt
 from aQt import QtGui
 
@@ -11,6 +11,7 @@ from fwidgets.cx_led import CXEventLed
 from fwidgets.cx_combobox import CXTextComboBox
 from fwidgets.cx_lineedit import CXLineEdit
 from fwidgets.cx_progressbar import CXProgressBar
+from fwidgets.auxwidgets import Line, BaseGridW
 
 from training_ctl_widget import TrainingCtlW
 
@@ -19,25 +20,6 @@ from acc_ctl.mode_defs import mode_colors
 import os.path as op
 
 script_path = op.dirname(op.realpath(__file__))
-
-
-class Line(QFrame):
-    def __init__(self, *args):
-        super(Line, self).__init__(*args)
-        self.setFrameShape(QFrame.HLine)
-        self.setFrameShadow(QFrame.Raised)
-        self.setLineWidth(3)
-        self.setMidLineWidth(3)
-
-
-class BaseGridW(QWidget):
-    def __init__(self, parent=None):
-        super(BaseGridW, self).__init__(parent)
-        self.setContentsMargins(0, 0, 0, 0)
-        self.grid = QGridLayout()
-        self.grid.setContentsMargins(0, 0, 0, 0)
-        self.grid.setSpacing(0)
-        self.setLayout(self.grid)
 
 
 class InjExtCtl(BaseGridW):
@@ -107,7 +89,7 @@ class K500State(BaseGridW):
     def __init__(self, parent=None):
         super(K500State, self).__init__(parent)
 
-        self.grid.addWidget(QLabel("K500 state"), 0, 0, 1, 4, Qt.AlignHCenter)
+        self.grid.addWidget(QLabel("K500 mode"), 0, 0, 1, 4, Qt.AlignHCenter)
 
         self.grid.addWidget(QLabel("mode"), 1, 0)
         self.cb_particles = CXTextComboBox(cname='cxhw:0.k500.modet', values=['e2v2', 'p2v2', 'e2v4', 'p2v4'])

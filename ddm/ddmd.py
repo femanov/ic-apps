@@ -6,7 +6,7 @@ from injext_looper import InjExtLoop
 
 class DDMService(CothreadQtService):
     def run_main(self):
-        injext_loop = InjExtLoop()
+        self.injext_loop = InjExtLoop()
 
     def clean(self):
         self.log_str('exiting doom\`s day machine')

@@ -4,20 +4,16 @@ import time
 
 from aux import str2u
 from aux.Qt import QtCore, QtGui, QtWidgets
+from fwidgets.auxwidgets import BaseGridW
 from acc_db.mode_list import ModeListFull
 from acc_db.sys_tree import SysTree
 from acc_db.chan_kinds import KindTable
 from acc_ctl.mode_ser import ModesClient
 
 
-class SaverWidget(QtWidgets.QWidget):
+class SaverWidget(BaseGridW):
     def __init__(self, parent=None):
         super(SaverWidget, self).__init__(parent)
-        self.setContentsMargins(0, 0, 0, 0)
-        self.grid = QtWidgets.QGridLayout()
-        self.grid.setContentsMargins(0, 0, 0, 0)
-        self.grid.setSpacing(0)
-        self.setLayout(self.grid)
 
         self.flist = ModeListFull()
         self.flist.setFixedSize(800, 800)
