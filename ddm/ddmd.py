@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 import sys
-from aux.service_daemon import CothreadQtService
+from aux.service_daemon import QtService
 from injext_looper import InjExtLoop
 
 
-class DDMService(CothreadQtService):
+class DDMService(QtService):
     def main(self):
         self.injext_loop = InjExtLoop()
 
