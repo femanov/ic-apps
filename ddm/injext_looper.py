@@ -4,7 +4,6 @@ from PyQt5.QtCore import QObject, pyqtSignal, QTimer
 from linstarter import  LinStarter
 from extractor import Extractor
 from pu_switcher import PUSwitcher
-from acc_ctl.k500modes import K500Director
 import pycx4.qcda as cda
 from acc_ctl.mode_ser import ModesClient
 
@@ -70,7 +69,6 @@ class InjExtLoop(QObject):
         self.c_cmds = [cda.IChan('cxhw:0.ddm.' + x, on_update=True) for x in self.cmds]
         for c in self.c_cmds:
             c.valueMeasured.connect(self.cmd_proc)
-        print(self.c_cmds)
 
         # option-command channels
         self.c_particles = cda.StrChan('cxhw:0.ddm.particles', on_update=True)
@@ -102,6 +100,8 @@ class InjExtLoop(QObject):
             self.extractor.start_training()
 
     def particles_update(self, chan):
+        if self.req_pu_mode is not None:
+            return
         if self.particles == chan.val or chan.val not in {'e', 'p'}:
             return
         if self.ic_runmode == 'idle':
@@ -110,20 +110,23 @@ class InjExtLoop(QObject):
             self.req_particles = chan.val
 
     def set_particles(self, p):
+        print('set particles call')
         if self.particles == p:
             return
         self.particles = p
         self.linStarter.set_particles(self.particles)
-        self.c_particles.setValue(p)
+        if self.c_particles.val != p:
+            self.c_particles.setValue(p)
+
 
     def set_pu_mode(self, mode):
         if self.pu_mode == mode:
             return
+        self.req_pu_mode = mode
+        print('requested mode: ', mode)
         if self.ic_runmode == 'idle':
-            self.req_pu_mode = mode
+            print('going to switching state')
             self.run_state('pu_switching')
-        else:
-            self.req_pu_mode = mode
 
     def run_state(self, state=None):
         if state is not None:
@@ -180,12 +183,14 @@ class InjExtLoop(QObject):
             self.timer.singleShot(50, self.run_state)
 
     def __pu_switching(self):
+        print('runing pu switching with: ', self.req_pu_mode)
         if self.req_pu_mode is None:
             return
         self.set_particles(self.req_pu_mode[0])
         self.pu_ctl.switch_mode(self.req_pu_mode)
 
     def __pu_switched(self):
+        self.req_pu_mode = None
         if self.ic_runmode == "auto-cycle":
             self.state = "preinject"
             self.timer.singleShot(50, self.run_state)
@@ -199,7 +204,6 @@ class InjExtLoop(QObject):
         if chan.first_cycle:
             return
         sn = chan.short_name()
-        print(sn)
         getattr(self, sn)()
 
 

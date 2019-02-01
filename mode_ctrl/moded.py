@@ -66,6 +66,8 @@ class ModeDeamon:
         for k in self.walkers:
             self.walkers[k].done.connect(self.mode_ser.walkerDone)
 
+        self.dump_count = 0
+
     def cx_resolve(self, chan):
         row = self.cind[chan.name][1]
         if chan.rslv_stat == cda.RSLVSTAT_NOTFOUND or chan.rslv_stat == cda.RSLVSTAT_SEARCHING:
@@ -100,6 +102,13 @@ class ModeDeamon:
         # mode_data cols: protocol, chan_name, value
         loaded_count, nochange_count, na_count, unknown_count = 0, 0, 0, 0
         epics_chans, epics_values = [], []
+
+        # dump_file = open("/var/tmp/dump" + str(self.dump_count) + ".txt", "w")
+        # for x in mode_data:
+        #     dump_file.write(str(x) + "\n")
+        # dump_file.close()
+        # self.dump_count += 1
+
 
         for row in mode_data:
             c_row = self.avaliable_cind.get(row[1], None)
@@ -173,6 +182,7 @@ class ModeDeamon:
         dump_file = open("/var/tmp/moded_dump", "w")
         for x in self.db_chans:
             dump_file.write(str(x) + "\n")
+        dump_file.close()
 
 
 class ModeService(CothreadQtService):
