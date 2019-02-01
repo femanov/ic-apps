@@ -82,9 +82,11 @@ class PUSwitcher(QObject):
             self.modes[x] = mode
 
     def switch_mode(self, mode):
-        print('switching mode to: ', mode)
         self.req_mode = mode
         sw = self.what2switch(mode)
+        print('requested mode: ', self.req_mode)
+        print('modes: ', self.modes)
+        print('switching: ', sw)
         sys2sw = []
         for k in sw:
             sys2sw += mode_subsys[k]
@@ -97,7 +99,6 @@ class PUSwitcher(QObject):
             self.k500ctl.set_mode(mode_map[mode])
             pass
 
-        print('mode request: ', mode_map[mode], sys2sw)
         self.mode_ctl.load_marked(mode_map[mode], sys2sw)
         if not need_remag:
             self.timer.singleShot(500, self.switched)

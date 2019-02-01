@@ -110,7 +110,7 @@ class InjExtLoop(QObject):
             self.req_particles = chan.val
 
     def set_particles(self, p):
-        print('set particles call')
+        #print('set particles call')
         if self.particles == p:
             return
         self.particles = p
@@ -123,9 +123,9 @@ class InjExtLoop(QObject):
         if self.pu_mode == mode:
             return
         self.req_pu_mode = mode
-        print('requested mode: ', mode)
+        #print('requested mode: ', mode)
         if self.ic_runmode == 'idle':
-            print('going to switching state')
+            #print('going to switching state')
             self.run_state('pu_switching')
 
     def run_state(self, state=None):
@@ -152,7 +152,7 @@ class InjExtLoop(QObject):
         if self.req_particles is not None:
             self.set_particles(self.req_particles)
             self.req_particles = None
-            print("particles updated to: ", self.particles)
+            #print("particles updated to: ", self.particles)
         if self.req_pu_mode is not None:
             self.run_state('pu_switching')
             return

@@ -9,7 +9,7 @@ class DDMService(QtService):
         self.injext_loop = InjExtLoop()
 
     def clean(self):
-        self.log_str('exiting doom\`s day machine')
+        self.log_str('exiting doom\`s day machine daemon')
 
 
 ddmd = DDMService("ddmd")
