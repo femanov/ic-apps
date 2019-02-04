@@ -16,7 +16,7 @@ mode_subsys = {
     'syn.transfer': [49],
     'K500.e-ext': [50, 51, 52, 53],
     'K500.p-ext': [54, 55, 56, 57],
-    'K500.com': [58, 59, 60, 61, 62, 63],
+    'K500.com': [58, 61, 62, 63],
     'K500.cVEPP3': [64, 65, 66, 67],
     'K500.cBEP': [68, 69, 70, 71],
 }
@@ -65,11 +65,6 @@ class PUSwitcher(QObject):
         self.wait_remag = False
         self.timer = QTimer()
 
-    def switched(self):
-        self.set_mode(self.req_mode)
-        self.req_mode = None
-        self.switching_done.emit()
-
     def what2switch(self, mode):
         bline = bline_parts[mode]
         return [bline[ind] for ind in range(len(bline)) if mode != self.modes[bline[ind]]]
@@ -96,19 +91,18 @@ class PUSwitcher(QObject):
         sys2sw = []
         for k in sw:
             sys2sw += mode_subsys[k]
-        need_remag = False
-        for x in remag_subsys:
-            if x in sys2sw:
-                need_remag = True
-                sys2sw.remove(x)
-        if need_remag:
-            self.k500ctl.set_mode(mode_map[mode])
-            pass
 
         self.mode_ctl.load_marked(mode_map[mode], sys2sw)
-        if not need_remag:
+
+        if 'K500.com' in sw:
+            self.timer.singleShot(100, self.remag)
+        else:
             self.timer.singleShot(500, self.switched)
 
+    def remag(self):
+        self.k500ctl.set_mode(mode_map[self.req_mode])
 
-
-
+    def switched(self):
+        self.set_mode(self.req_mode)
+        self.req_mode = None
+        self.switching_done.emit()
