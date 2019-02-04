@@ -166,7 +166,7 @@ class InjExtLoop(QObject):
     def __injected(self):
         self.c_injected.setValue(1)
         if self.ic_runmode in {"single-cycle", "auto-cycle"}:
-            self.timer.singleShot(50, self.next_state)
+            self.timer.singleShot(80, self.next_state)
 
     def __preextract(self):
         ext_mode = self.modes[self.particles][1]  # 1 - extraction modes
@@ -180,7 +180,7 @@ class InjExtLoop(QObject):
         self.c_extracted.setValue(1)
         if self.ic_runmode == "auto-cycle":
             self.state = "preinject"
-            self.timer.singleShot(50, self.run_state)
+            self.timer.singleShot(80, self.run_state)
 
     def __pu_switching(self):
         print('runing pu switching with: ', self.req_pu_mode)
