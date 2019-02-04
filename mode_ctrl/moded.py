@@ -103,11 +103,11 @@ class ModeDeamon:
         loaded_count, nochange_count, na_count, unknown_count = 0, 0, 0, 0
         epics_chans, epics_values = [], []
 
-        dump_file = open("/var/tmp/dump" + str(self.dump_count) + ".txt", "w")
-        for x in mode_data:
-            dump_file.write(str(x) + "\n")
-        dump_file.close()
-        self.dump_count += 1
+        # dump_file = open("/var/tmp/dump" + str(self.dump_count) + ".txt", "w")
+        # for x in mode_data:
+        #     dump_file.write(str(x) + "\n")
+        # dump_file.close()
+        # self.dump_count += 1
 
 
         for row in mode_data:
