@@ -118,7 +118,6 @@ class InjExtLoop(QObject):
         if self.c_particles.val != p:
             self.c_particles.setValue(p)
 
-
     def set_pu_mode(self, mode):
         if self.pu_mode == mode:
             return

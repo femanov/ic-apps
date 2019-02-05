@@ -76,7 +76,7 @@ class PUSwitcher(QObject):
         for x in sw:
             self.modes[x] = mode
 
-    def switch_mode(self, mode):
+    def switch_mode(self, mode, **kwargs):
         if self.all_mode == mode:
             print('switching to the same mode? ignoring')
             return
@@ -84,7 +84,12 @@ class PUSwitcher(QObject):
             print('mode already requested. ignoring needed?')
             #return
         self.req_mode = mode
-        sw = self.what2switch(mode)
+
+        switch_all = kwargs.get('switch_all', True)
+        if switch_all:
+            sw = mode_subsys.keys()
+        else:
+            sw = self.what2switch(mode)
         print('requested mode: ', self.req_mode)
         print('modes: ', self.modes)
         print('switching: ', sw)
