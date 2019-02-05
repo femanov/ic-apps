@@ -29,7 +29,7 @@ class InjExtLoop(QObject):
 
         self.pu_mode = None
         self.req_pu_mode = None
-
+        self.req_kickers_mode = False
         self.state = 'idle'
         self.ic_runmode = 'idle'
 
@@ -44,7 +44,7 @@ class InjExtLoop(QObject):
             'p': [3, 4]
         }
 
-        self.modeCtl.markedReady.connect(self.next_state)
+        self.modeCtl.markedReady.connect(self.kickers_loaded)
         self.linStarter.runDone.connect(self.next_state)
         self.extractor.extractionDone.connect(self.next_state)
         self.pu_ctl.switching_done.connect(self.next_state)
@@ -127,6 +127,12 @@ class InjExtLoop(QObject):
             #print('going to switching state')
             self.run_state('pu_switching')
 
+    def kickers_loaded(self):
+        if self.req_kickers_mode:
+            self.timer.singleShot(80, self.next_state)
+            self.req_kickers_mode = False
+
+
     def run_state(self, state=None):
         if state is not None:
             self.state = state
@@ -156,6 +162,7 @@ class InjExtLoop(QObject):
             self.run_state('pu_switching')
             return
 
+        self.req_kickers_mode = True
         inj_mode = self.modes[self.particles][0]  # 0 - injection
         self.modeCtl.load_marked(inj_mode, self.mode_subsys, ['rw'])
 
@@ -165,9 +172,10 @@ class InjExtLoop(QObject):
     def __injected(self):
         self.c_injected.setValue(1)
         if self.ic_runmode in {"single-cycle", "auto-cycle"}:
-            self.timer.singleShot(80, self.next_state)
+            self.next_state()
 
     def __preextract(self):
+        self.req_kickers_mode = True
         ext_mode = self.modes[self.particles][1]  # 1 - extraction modes
         self.modeCtl.load_marked(ext_mode, self.mode_subsys, ['rw'])
 
@@ -179,7 +187,7 @@ class InjExtLoop(QObject):
         self.c_extracted.setValue(1)
         if self.ic_runmode == "auto-cycle":
             self.state = "preinject"
-            self.timer.singleShot(80, self.run_state)
+            self.run_state()
 
     def __pu_switching(self):
         print('runing pu switching with: ', self.req_pu_mode)
