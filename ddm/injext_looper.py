@@ -181,7 +181,7 @@ class InjExtLoop(QObject):
         self.modeCtl.load_marked(ext_mode, self.mode_subsys, ['rw'])
 
     def __extract2(self):
-        self.c_extr_beamCur.setValue(self.c_beamcunr.val)
+        self.c_extr_beamCur.setValue(self.c_beamcur.val)
         self.extractor.extract()
 
     def __extracted(self):
