@@ -175,7 +175,6 @@ class InjExtLoop(QObject):
             self.next_state()
 
     def __preextract(self):
-        self.c_extr_beamCur.setValue(self.c_beamcur.val)
         self.req_kickers_mode = True
         ext_mode = self.modes[self.particles][1]  # 1 - extraction modes
         self.modeCtl.load_marked(ext_mode, self.mode_subsys, ['rw'])
