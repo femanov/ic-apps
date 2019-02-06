@@ -86,7 +86,7 @@ class InjExtLoop(QObject):
         self.c_extracted = cda.IChan('cxhw:0.ddm.extracted', on_update=True)
 
         # beam current channels
-        self.c_beamcunr = cda.DChan('cxhw:0.dcct.beamcurrent', on_update=True)
+        self.c_beamcur = cda.DChan('cxhw:0.dcct.beamcurrent', on_update=True)
         self.c_extr_beamCur = cda.DChan('cxhw:0.dcct.ExtractionCurrent', on_update=True)
 
     def train_interval_update(self, chan):
@@ -175,6 +175,7 @@ class InjExtLoop(QObject):
             self.next_state()
 
     def __preextract(self):
+        self.c_extr_beamCur.setValue(self.c_beamcur.val)
         self.req_kickers_mode = True
         ext_mode = self.modes[self.particles][1]  # 1 - extraction modes
         self.modeCtl.load_marked(ext_mode, self.mode_subsys, ['rw'])
