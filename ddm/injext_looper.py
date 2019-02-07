@@ -225,6 +225,7 @@ class InjExtLoop(QObject):
         self.pu_ctl.switch_mode(self.req_pu_mode)
 
     def __pu_switched(self):
+        self.pu_mode = self.req_pu_mode
         self.req_pu_mode = None
         if self.ic_runmode == "auto-cycle":
             self.state = "preinject"
