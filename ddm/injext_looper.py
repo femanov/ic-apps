@@ -4,6 +4,8 @@ from PyQt5.QtCore import QObject, pyqtSignal, QTimer
 from linstarter import  LinStarter
 from extractor import Extractor
 from pu_switcher import PUSwitcher
+from acc_ctl.linbeamctl import LinBeamCtl
+
 import pycx4.qcda as cda
 from acc_ctl.mode_ser import ModesClient
 
@@ -92,11 +94,23 @@ class InjExtLoop(QObject):
         self.c_v2k_auto = cda.IChan('cxhw:0.ddm.v2k_auto', on_update=True)
         self.c_v2k_particles = cda.StrChan('cxhw:0.bep.particles', on_update=True)
         self.c_v2k_particles.valueMeasured.connect(self.v2k_auto_mode)
+        self.c_v2k_offline = cda.IChan('cxhw:0.bep.offline', on_update=True)
+        self.c_v2k_offline.valueMeasured.connect(self.v2k_offline_proc)
 
-    def v2k_auto_mode(self,chan):
-        if self.c_v2k_auto == 0 or self.req_pu_mode is not None:
+        self.linbeam_cor = LinBeamCtl()
+
+
+    def v2k_offline_proc(self, chan):
+        if self.c_v2k_auto == 0 or self.pu_mode not in {'e2v2', 'p2v2'}:
             return
-        if self.pu_mode not in {'e2v2', 'p2v2'}:
+        if chan.val == 1:
+            self.linbeam_cor.close_beam()
+        elif chan.val == 0:
+            self.linbeam_cor.close_beam()
+
+    def v2k_auto_mode(self, chan):
+        print('v2k mode chanded to: ', chan.val)
+        if self.c_v2k_auto == 0 or self.req_pu_mode is not None:
             return
         if chan.val == 'positrons' and self.pu_mode == 'e2v2':
             self.p2v2()
