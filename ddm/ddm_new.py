@@ -130,7 +130,11 @@ class PUSwitch(BaseGridW):
         #self.grid.addWidget(QLabel("switching"), 5, 0, 1, 2, Qt.AlignHCenter)
         self.sw_progress = CXProgressBar(cname='cxhw:0.k500.mode_progress')
         self.grid.addWidget(self.sw_progress, 5, 0, 1, 2)
-        #self.mode_ind =
+
+        self.grid.addWidget(QLabel("allow vepp2k automatics"), 6, 0)
+        self.auto_v2k_ctl = CXCheckBox(cname='cxhw:0.ddm.v2k_auto')
+        self.grid.addWidget(self.auto_v2k_ctl, 6, 1)
+
 
 
 

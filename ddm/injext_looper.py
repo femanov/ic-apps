@@ -89,6 +89,21 @@ class InjExtLoop(QObject):
         self.c_beamcur = cda.DChan('cxhw:0.dcct.beamcurrent', on_update=True)
         self.c_extr_beamCur = cda.DChan('cxhw:0.dcct.ExtractionCurrent', on_update=True)
 
+        self.c_v2k_auto = cda.IChan('cxhw:0.ddm.v2k_auto', on_update=True)
+        self.c_v2k_particles = cda.StrChan('cxhw:0.bep.particles', on_update=True)
+        self.c_v2k_particles.valueMeasured.connect(self.v2k_auto_mode)
+
+    def v2k_auto_mode(self,chan):
+        if self.c_v2k_auto == 0 or self.req_pu_mode is not None:
+            return
+        if self.pu_mode not in {'e2v2', 'p2v2'}:
+            return
+        if chan.val == 'positrons' and self.pu_mode == 'e2v2':
+            self.p2v2()
+        if chan.val == 'electrons' and self.pu_mode == 'p2v2':
+            self.e2v2()
+
+
     def train_interval_update(self, chan):
         if chan.val > 0:
             self.extractor.set_training_interval(chan.val)
@@ -157,13 +172,12 @@ class InjExtLoop(QObject):
         if self.req_particles is not None:
             self.set_particles(self.req_particles)
             self.req_particles = None
-            #print("particles updated to: ", self.particles)
         if self.req_pu_mode is not None:
             self.run_state('pu_switching')
             return
 
         self.req_kickers_mode = True
-        inj_mode = self.modes[self.particles][0]  # 0 - injection
+        inj_mode = self.modes[self.particles][0]
         self.modeCtl.load_marked(inj_mode, self.mode_subsys, ['rw'])
 
     def __inject2(self):
@@ -190,7 +204,6 @@ class InjExtLoop(QObject):
             self.run_state()
 
     def __pu_switching(self):
-        print('runing pu switching with: ', self.req_pu_mode)
         if self.req_pu_mode is None:
             return
         self.set_particles(self.req_pu_mode[0])
@@ -205,16 +218,12 @@ class InjExtLoop(QObject):
             self.state = 'idle'
             self.run_state()
 
-
-    # commands
     def cmd_proc(self, chan):
         if chan.first_cycle:
             return
         sn = chan.short_name()
         getattr(self, sn)()
 
-
-    # stop any operation
     def set_runmode(self, runmode):
         self.ic_runmode = runmode
         self.c_icrunmode.setValue(runmode)
