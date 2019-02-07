@@ -101,16 +101,17 @@ class InjExtLoop(QObject):
 
 
     def v2k_offline_proc(self, chan):
-        if self.c_v2k_auto == 0 or self.pu_mode not in {'e2v2', 'p2v2'}:
+        if self.c_v2k_auto.val == 0 or self.pu_mode not in {'e2v2', 'p2v2'}:
             return
-        if chan.val == 1:
+        if self.c_v2k_offline.val == 1:
             self.linbeam_cor.close_beam()
-        elif chan.val == 0:
-            self.linbeam_cor.close_beam()
+        elif self.c_v2k_offline.val == 0:
+            self.linbeam_cor.open_beam()
 
     def v2k_auto_mode(self, chan):
         print('v2k mode chanded to: ', chan.val)
-        if self.c_v2k_auto == 0 or self.req_pu_mode is not None:
+        print('current mode: ', self.pu_mode)
+        if self.c_v2k_auto.val == 0 or self.req_pu_mode is not None:
             return
         if chan.val == 'positrons' and self.pu_mode == 'e2v2':
             self.p2v2()
