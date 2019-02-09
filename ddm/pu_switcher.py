@@ -45,6 +45,8 @@ class PUSwitcher(QObject):
         self.c_k500_mag_state = cda.StrChan('cxhw:0.k500.mag_state')
 
         self.k500ctl.progressing.connect(self.c_mode_progress.setValue)
+        self.k500ctl.progressing.connect(print)
+
         #self.k500ctl.modeCurUpdate.connect(self.update_cur_mode)
         self.k500ctl.done.connect(self.switched)
 
@@ -79,10 +81,10 @@ class PUSwitcher(QObject):
     def switch_mode(self, mode, **kwargs):
         if self.all_mode == mode:
             print('switching to the same mode? ignoring')
-            return
+            #return
         if self.req_mode == mode:
             print('mode already requested. ignoring needed?')
-            return
+            #return
         self.req_mode = mode
 
         switch_all = kwargs.get('switch_all', True)
