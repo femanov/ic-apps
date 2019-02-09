@@ -169,6 +169,7 @@ class ModeDeamon:
     # currently it's a special load to cycle k500 magnets with drivers automatics
     def walkerLoad(self, walkers_path):
         # walkers_path - is a dict with {'walker': [mark_ids] }
+        print('recieved walker path command: ', walkers_path)
         for key in walkers_path:
             mark_ids = walkers_path[key]
             cname = remag_srv + '.' + key + '.Iset'  # case ?
