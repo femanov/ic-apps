@@ -118,7 +118,6 @@ class InjExtLoop(QObject):
         if chan.val == 'electrons' and self.pu_mode == 'p2v2':
             self.e2v2()
 
-
     def train_interval_update(self, chan):
         if chan.val > 0:
             self.extractor.set_training_interval(chan.val)
@@ -219,20 +218,21 @@ class InjExtLoop(QObject):
             self.run_state()
 
     def __pu_switching(self):
+        print("switching")
         if self.req_pu_mode is None:
+            print('mode not requested')
             return
         self.set_particles(self.req_pu_mode[0])
         self.pu_ctl.switch_mode(self.req_pu_mode)
 
     def __pu_switched(self):
+        print('mode switching complete')
         self.pu_mode = self.req_pu_mode
         self.req_pu_mode = None
         if self.ic_runmode == "auto-cycle":
-            self.state = "preinject"
-            self.timer.singleShot(50, self.run_state)
+            self.run_state("preinject")
         else:
-            self.state = 'idle'
-            self.run_state()
+            self.run_state('idle')
 
     def cmd_proc(self, chan):
         if chan.first_cycle:
