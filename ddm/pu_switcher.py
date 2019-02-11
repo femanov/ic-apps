@@ -7,21 +7,15 @@ import pycx4.qcda as cda
 from acc_ctl.mode_ser import ModesClient
 from acc_ctl.k500modes import K500Director
 
+from settings.db import acc_cfg
+from acc_db.db import AccConfig
 
-mode_subsys = {
-    'linac': [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
-              19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
-              32, 33, 34, 35, 36],
-    'ring': [40, 41, 42, 43, 44, 45, 46, 47],
-    'syn.transfer': [49],
-    'K500.e-ext': [50, 51, 52, 53],
-    'K500.p-ext': [54, 55, 56, 57],
-    'K500.com': [58, 61, 62, 63],
-    'K500.cVEPP3': [64, 65, 66, 67],
-    'K500.cBEP': [68, 69, 70, 71],
-}
+db = AccConfig(**acc_cfg)
 
-remag_subsys = [59, 60]
+subsys_names = ['linac', 'ring', 'syn.transfer', 'K500.e-ext', 'K500.p-ext', 'K500.com', 'K500.cVEPP3', 'K500.cBEP']
+mode_subsys = {x: db.sys_descendants(x) for x in subsys_names}
+
+print(mode_subsys)
 
 bline_parts = {
     'e2v2': ['linac', 'ring', 'syn.transfer', 'K500.e-ext', 'K500.com', 'K500.cBEP'],
