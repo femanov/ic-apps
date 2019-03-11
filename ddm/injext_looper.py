@@ -61,10 +61,10 @@ class InjExtLoop(QObject):
         ]
 
         # output channels
-        self.c_state = cda.StrChan('cxhw:0.ddm.state', on_update=True)
-        self.c_stateMsg = cda.StrChan('cxhw:0.ddm.stateMsg', on_update=True)
+        self.c_state = cda.StrChan('cxhw:0.ddm.state', on_update=True, max_nelems=20)
+        self.c_stateMsg = cda.StrChan('cxhw:0.ddm.stateMsg', on_update=True, max_nelems=20)
 
-        self.c_icrunmode = cda.StrChan('cxhw:0.ddm.ICRunMode', on_update=True)
+        self.c_icrunmode = cda.StrChan('cxhw:0.ddm.ICRunMode', on_update=True, max_nelems=20)
 
         # command channels
         self.cmds = ['stop', 'inject', 'extract', 'nround', 'autorun', 'e2v4', 'p2v4', 'e2v2', 'p2v2']
@@ -73,7 +73,7 @@ class InjExtLoop(QObject):
             c.valueMeasured.connect(self.cmd_proc)
 
         # option-command channels
-        self.c_particles = cda.StrChan('cxhw:0.ddm.particles', on_update=True)
+        self.c_particles = cda.StrChan('cxhw:0.ddm.particles', on_update=True, max_nelems=20)
         self.c_particles.valueMeasured.connect(self.particles_update)
         self.c_particles.setValue(self.particles)
 
@@ -92,7 +92,7 @@ class InjExtLoop(QObject):
         self.c_extr_beamCur = cda.DChan('cxhw:0.dcct.ExtractionCurrent', on_update=True)
 
         self.c_v2k_auto = cda.IChan('cxhw:0.ddm.v2k_auto', on_update=True)
-        self.c_v2k_particles = cda.StrChan('cxhw:0.bep.particles', on_update=True)
+        self.c_v2k_particles = cda.StrChan('cxhw:0.bep.particles', on_update=True, max_nelems=20)
         self.c_v2k_particles.valueMeasured.connect(self.v2k_auto_mode)
         self.c_v2k_offline = cda.IChan('cxhw:0.bep.offline', on_update=True)
         self.c_v2k_offline.valueMeasured.connect(self.v2k_offline_proc)

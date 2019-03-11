@@ -35,10 +35,10 @@ class Extractor(QObject):
 
         self.clock_src = 0
 
-        self.c_clock_src = cda.DChan("canhw:19.ic.extractor.clockSrc", on_update=True)
-        self.c_do_shot = cda.DChan("canhw:19.xfr_d16_20.do_shot",  on_update=True)
-        self.c_was_shot = cda.DChan("canhw:19.xfr_d16_20.was_start",  on_update=True)
-        self.c_stop = cda.DChan("canhw:19.xfr_d16_20.ones_stop",  on_update=True)
+        self.c_clock_src = cda.IChan("canhw:19.ic.extractor.clockSrc", on_update=True)
+        self.c_do_shot = cda.IChan("canhw:19.xfr_d16_20.do_shot",  on_update=True)
+        self.c_was_shot = cda.IChan("canhw:19.xfr_d16_20.was_start",  on_update=True)
+        self.c_stop = cda.IChan("canhw:19.xfr_d16_20.ones_stop",  on_update=True)
 
         self.c_was_shot.valueMeasured.connect(self.was_shot_proc)
         self.c_clock_src.valueChanged.connect(self.clock_src_update)
@@ -74,6 +74,7 @@ class Extractor(QObject):
         self.stop_training()
         self.extract_request = True
         self.do_shot()
+
 
     def start_training(self):
         if self.training_shots:
