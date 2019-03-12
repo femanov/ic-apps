@@ -34,9 +34,9 @@ class PUSwitcher(QObject):
         self.mode_ctl = kwargs.get('mode_ctl', ModesClient())
         self.k500ctl = kwargs.get('k500ctl', K500Director())
 
-        self.c_k500mode = cda.StrChan('cxhw:0.k500.modet')
+        self.c_k500mode = cda.StrChan('cxhw:0.k500.modet', max_nelems=4)
         self.c_mode_progress = cda.IChan('cxhw:0.k500.mode_progress')
-        self.c_k500_mag_state = cda.StrChan('cxhw:0.k500.mag_state')
+        self.c_k500_mag_state = cda.StrChan('cxhw:0.k500.mag_state', max_nelems=4)
 
         self.k500ctl.progressing.connect(self.c_mode_progress.setValue)
         self.k500ctl.progressing.connect(print)
