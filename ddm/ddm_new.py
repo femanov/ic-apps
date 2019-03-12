@@ -92,7 +92,9 @@ class K500State(BaseGridW):
         self.grid.addWidget(QLabel("K500 mode"), 0, 0, 1, 4, Qt.AlignHCenter)
 
         self.grid.addWidget(QLabel("mode"), 1, 0)
-        self.cb_particles = CXTextComboBox(cname='cxhw:0.k500.modet', values=['e2v2', 'p2v2', 'e2v4', 'p2v4'])
+        vals = ['e2v2', 'p2v2', 'e2v4', 'p2v4']
+        self.cb_particles = CXTextComboBox(cname='cxhw:0.k500.modet', values=vals,
+                                           colors=[mode_colors[x] for x in vals])
         self.grid.addWidget(self.cb_particles, 1, 1)
 
 class PUSwitch(BaseGridW):
@@ -134,8 +136,6 @@ class PUSwitch(BaseGridW):
         self.grid.addWidget(QLabel("allow vepp2k automatics"), 6, 0)
         self.auto_v2k_ctl = CXCheckBox(cname='cxhw:0.ddm.v2k_auto')
         self.grid.addWidget(self.auto_v2k_ctl, 6, 1)
-
-
 
 
 class DDMWidget(BaseGridW):
