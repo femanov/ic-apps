@@ -77,11 +77,11 @@ class InjExtState(BaseGridW):
         self.grid.addWidget(self.ext_led, 2, 3, Qt.AlignLeft)
 
         self.grid.addWidget(QLabel("state"), 3, 0)
-        self.state_line = CXLineEdit(cname='cxhw:0.ddm.state', readonly=True)
+        self.state_line = CXLineEdit(cname='cxhw:0.ddm.state', readonly=True, max_len=100)
         self.grid.addWidget(self.state_line, 3, 1)
 
         self.grid.addWidget(QLabel("runmode"), 4, 0)
-        self.runmode_line = CXLineEdit(cname='cxhw:0.ddm.icrunmode', readonly=True)
+        self.runmode_line = CXLineEdit(cname='cxhw:0.ddm.icrunmode', readonly=True, max_len=100)
         self.grid.addWidget(self.runmode_line, 4, 1)
 
 

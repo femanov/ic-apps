@@ -62,7 +62,7 @@ class InjExtLoop(QObject):
 
         # output channels
         self.c_state = cda.StrChan('cxhw:0.ddm.state', on_update=True, max_nelems=20)
-        self.c_stateMsg = cda.StrChan('cxhw:0.ddm.stateMsg', on_update=True, max_nelems=20)
+        self.c_stateMsg = cda.StrChan('cxhw:0.ddm.stateMsg', on_update=True, max_nelems=100)
 
         self.c_icrunmode = cda.StrChan('cxhw:0.ddm.ICRunMode', on_update=True, max_nelems=20)
 
