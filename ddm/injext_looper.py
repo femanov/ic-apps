@@ -41,10 +41,6 @@ class InjExtLoop(QObject):
         self.pu_ctl = PUSwitcher()
 
         self.mode_subsys = [37, 38, 39]
-        self.modes = {
-            'e': [1, 2],
-            'p': [3, 4]
-        }
 
         self.modeCtl.markedReady.connect(self.kickers_loaded)
         self.linStarter.runDone.connect(self.next_state)
@@ -191,7 +187,7 @@ class InjExtLoop(QObject):
             return
 
         self.req_kickers_mode = True
-        inj_mode = self.modes[self.particles][0]
+        inj_mode = self.particles + 'inj'
         self.modeCtl.load_marked(inj_mode, self.mode_subsys, ['rw'])
 
     def __inject2(self):
@@ -204,7 +200,7 @@ class InjExtLoop(QObject):
 
     def __preextract(self):
         self.req_kickers_mode = True
-        ext_mode = self.modes[self.particles][1]  # 1 - extraction modes
+        ext_mode = self.particles + 'ext'
         self.modeCtl.load_marked(ext_mode, self.mode_subsys, ['rw'])
 
     def __extract2(self):
