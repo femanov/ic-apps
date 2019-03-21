@@ -15,7 +15,6 @@ db = AccConfig(**acc_cfg)
 subsys_names = ['linac', 'ring', 'syn.transfer', 'K500.e-ext', 'K500.p-ext', 'K500.com', 'K500.cVEPP3', 'K500.cBEP']
 mode_subsys = {x: db.sys_descendants(x) for x in subsys_names}
 
-print(mode_subsys)
 
 bline_parts = {
     'e2v2': ['linac', 'ring', 'syn.transfer', 'K500.e-ext', 'K500.com', 'K500.cBEP'],
