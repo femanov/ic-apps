@@ -187,8 +187,9 @@ class InjExtLoop(QObject):
             return
 
         self.req_kickers_mode = True
-        inj_mode = self.particles + 'inj'
-        self.modeCtl.load_marked(inj_mode, self.mode_subsys, ['rw'])
+        inj_mark = self.particles + 'inj'
+        print("requesting mode:", inj_mark )
+        self.modeCtl.load_marked(inj_mark, self.mode_subsys, ['rw'])
 
     def __inject2(self):
         self.linStarter.start()
@@ -201,6 +202,7 @@ class InjExtLoop(QObject):
     def __preextract(self):
         self.req_kickers_mode = True
         ext_mode = self.particles + 'ext'
+        print('requesting mode:', ext_mode)
         self.modeCtl.load_marked(ext_mode, self.mode_subsys, ['rw'])
 
     def __extract2(self):
