@@ -95,7 +95,6 @@ class InjExtLoop(QObject):
 
         self.linbeam_cor = LinBeamCtl()
 
-
     def v2k_offline_proc(self, chan):
         if self.c_v2k_auto.val == 0 or self.pu_mode not in {'e2v2', 'p2v2'}:
             return
@@ -105,8 +104,6 @@ class InjExtLoop(QObject):
             self.linbeam_cor.open_beam()
 
     def v2k_auto_mode(self, chan):
-        #print('v2k mode chanded to: ', chan.val)
-        #print('current mode: ', self.pu_mode)
         if self.c_v2k_auto.val == 0 or self.req_pu_mode is not None:
             return
         if chan.val == 'positrons' and self.pu_mode == 'e2v2':
@@ -135,7 +132,6 @@ class InjExtLoop(QObject):
             self.req_particles = chan.val
 
     def set_particles(self, p):
-        #print('set particles call')
         if self.particles == p:
             return
         self.particles = p
@@ -147,16 +143,13 @@ class InjExtLoop(QObject):
         if self.pu_mode == mode:
             return
         self.req_pu_mode = mode
-        #print('requested mode: ', mode)
         if self.ic_runmode == 'idle':
-            #print('going to switching state')
             self.run_state('pu_switching')
 
     def kickers_loaded(self):
         if self.req_kickers_mode:
             self.timer.singleShot(80, self.next_state)
             self.req_kickers_mode = False
-
 
     def run_state(self, state=None):
         if state is not None:
@@ -187,9 +180,7 @@ class InjExtLoop(QObject):
             return
 
         self.req_kickers_mode = True
-        inj_mark = self.particles + 'inj'
-        #print("requesting mode:", inj_mark )
-        self.modeCtl.load_marked(inj_mark, self.mode_subsys, ['rw'])
+        self.modeCtl.load_marked(self.particles + 'inj', self.mode_subsys, ['rw'])
 
     def __inject2(self):
         self.linStarter.start()
@@ -201,9 +192,7 @@ class InjExtLoop(QObject):
 
     def __preextract(self):
         self.req_kickers_mode = True
-        ext_mode = self.particles + 'ext'
-        #print('requesting mode:', ext_mode)
-        self.modeCtl.load_marked(ext_mode, self.mode_subsys, ['rw'])
+        self.modeCtl.load_marked(self.particles + 'ext', self.mode_subsys, ['rw'])
 
     def __extract2(self):
         self.c_extr_beamCur.setValue(self.c_beamcur.val)
@@ -216,7 +205,6 @@ class InjExtLoop(QObject):
             self.run_state()
 
     def __pu_switching(self):
-        #print("switching")
         if self.req_pu_mode is None:
             print('mode not requested')
             return
@@ -225,7 +213,6 @@ class InjExtLoop(QObject):
         self.pu_ctl.switch_mode(self.req_pu_mode)
 
     def __pu_switched(self):
-        #print('mode switching complete')
         self.pu_mode = self.req_pu_mode
         self.req_pu_mode = None
         if self.ic_runmode == "auto-cycle":
