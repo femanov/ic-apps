@@ -9,11 +9,12 @@ from acc_db.mode_list import ModeListFull
 from acc_db.sys_tree import SysTree
 from acc_db.chan_kinds import KindTable
 from acc_ctl.mode_ser import ModesClient
-
+from acc_db.db import ModesDB
 
 class SaverWidget(BaseGridW):
     def __init__(self, parent=None):
         super(SaverWidget, self).__init__(parent)
+        self.modes_db = ModesDB()
 
         self.flist = ModeListFull()
         self.flist.setFixedSize(900, 800)
@@ -38,6 +39,7 @@ class SaverWidget(BaseGridW):
         self.selected_sys = []
 
         self.flist.ctrlw.load.connect(self.load_mode)
+        self.flist.ctrlw.archive.connect(self.archive_mode)
 
         self.mode_cli = ModesClient()
         self.mode_cli.modeSaved.connect(self.mode_saved)
@@ -55,6 +57,14 @@ class SaverWidget(BaseGridW):
 
     def kinds_cb(self, kindlist):
         self.selected_kinds = kindlist
+
+    def archive_mode(self):
+        selected_id = self.flist.selected_mode
+        if selected_id is None:
+            self.print_msg('archive: mode not selected')
+            return
+        self.modes_db.archive_mode(selected_id)
+        self.mode_cli.ask_update()
 
     def load_mode(self):
         if self.flist.selected_mode is None:
