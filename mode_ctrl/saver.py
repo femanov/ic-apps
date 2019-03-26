@@ -16,7 +16,7 @@ class SaverWidget(BaseGridW):
         super(SaverWidget, self).__init__(parent)
 
         self.flist = ModeListFull()
-        self.flist.setFixedSize(800, 800)
+        self.flist.setFixedSize(900, 800)
         self.grid.addWidget(self.flist, 0, 0, 2, 1)
 
         self.stree = SysTree()
@@ -47,6 +47,8 @@ class SaverWidget(BaseGridW):
         self.flist.saveMode.connect(self.save)
         self.flist.outMsg.connect(self.print_msg)
         self.flist.markMode.connect(self.mode_cli.mark_mode)
+
+        self.flist.listw.modeUpdated.connect(self.mode_cli.ask_update)
 
     def sys_cb(self, syslist):
         self.selected_sys = syslist
@@ -96,8 +98,8 @@ app = QtWidgets.QApplication(['saver'])
 
 w = SaverWidget()
 w.show()
+w.setFixedSize(w.size())
 w.flist.update_modelist()
-
 
 app.exec_()
 
