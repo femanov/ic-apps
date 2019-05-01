@@ -11,7 +11,7 @@ from fwidgets.cx_led import CXEventLed
 from fwidgets.cx_combobox import CXTextComboBox
 from fwidgets.cx_lineedit import CXLineEdit
 from fwidgets.cx_progressbar import CXProgressBar
-from fwidgets.auxwidgets import Line, BaseGridW
+from fwidgets.auxwidgets import HLine, BaseGridW
 
 from training_ctl_widget import TrainingCtlW
 
@@ -145,22 +145,22 @@ class DDMWidget(BaseGridW):
         self.extr_trainer = TrainingCtlW()
         self.grid.addWidget(self.extr_trainer, 0, 0)
 
-        self.grid.addWidget(Line(), 1, 0)
+        self.grid.addWidget(HLine(), 1, 0)
 
         self.inj_ext = InjExtCtl()
         self.grid.addWidget(self.inj_ext, 2, 0)
 
-        self.grid.addWidget(Line(), 3, 0)
+        self.grid.addWidget(HLine(), 3, 0)
 
         self.inj_ext_st = InjExtState()
         self.grid.addWidget(self.inj_ext_st, 4, 0)
 
-        self.grid.addWidget(Line(), 5, 0)
+        self.grid.addWidget(HLine(), 5, 0)
 
         self.k500_st = K500State()
         self.grid.addWidget(self.k500_st, 6, 0)
 
-        self.grid.addWidget(Line(), 7, 0)
+        self.grid.addWidget(HLine(), 7, 0)
 
         self.pu_sw = PUSwitch()
         self.grid.addWidget(self.pu_sw, 8, 0)
