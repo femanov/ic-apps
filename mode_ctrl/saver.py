@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
 import time
-
-from aux import str2u
 from aux.Qt import QtCore, QtGui, QtWidgets
 from fwidgets.auxwidgets import BaseGridW
 from acc_db.mode_list import ModeListFull
