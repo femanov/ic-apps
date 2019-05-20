@@ -1,10 +1,7 @@
 
-from aux.Qt import QtCore, QtGui, QtWidgets
+from aux.Qt import QtCore, QtWidgets
+from fwidgets import CXSpinBox, CXCheckBox
 
-from fwidgets.cx_spinbox import CXSpinBox
-from fwidgets.cx_checkbox import CXCheckBox
-
-import pycx4.qcda as cda
 
 class TrainingCtlW(QtWidgets.QWidget):
     def __init__(self, parent=None, **kwargs):

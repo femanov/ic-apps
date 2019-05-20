@@ -4,19 +4,10 @@ from aQt.QtWidgets import QLabel, QApplication
 from aQt.QtCore import Qt
 from aQt import QtGui
 
-from fwidgets.cx_spinbox import CXSpinBox
-from fwidgets.cx_checkbox import CXCheckBox
-from fwidgets.cx_pushbutton import CXPushButton
-from fwidgets.cx_led import CXEventLed
-from fwidgets.cx_combobox import CXTextComboBox
-from fwidgets.cx_lineedit import CXLineEdit
-from fwidgets.cx_progressbar import CXProgressBar
-from fwidgets.auxwidgets import HLine, BaseGridW
-
+from fwidgets import CXSpinBox, CXCheckBox, CXPushButton, CXEventLed, CXTextComboBox, CXLineEdit, CXProgressBar, HLine, BaseGridW
 from training_ctl_widget import TrainingCtlW
 
 from acc_ctl.mode_defs import mode_colors
-
 import os.path as op
 
 script_path = op.dirname(op.realpath(__file__))
