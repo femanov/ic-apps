@@ -39,7 +39,6 @@ class PUSwitcher(QObject):
         self.c_k500_mag_state = cda.StrChan('cxhw:0.k500.mag_state', max_nelems=4)
 
         self.k500ctl.progressing.connect(self.c_mode_progress.setValue)
-        self.k500ctl.progressing.connect(print)
 
         #self.k500ctl.modeCurUpdate.connect(self.update_cur_mode)
         self.k500ctl.done.connect(self.switched)
