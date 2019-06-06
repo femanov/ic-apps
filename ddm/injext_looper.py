@@ -4,10 +4,10 @@ from PyQt5.QtCore import QObject, pyqtSignal, QTimer
 from linstarter import  LinStarter
 from extractor import Extractor
 from pu_switcher import PUSwitcher
-from acc_ctl.linbeamctl import LinBeamCtl
 
 import pycx4.qcda as cda
 from acc_ctl.mode_ser import ModesClient
+from acc_ctl.linbeamctl import LinBeamCtl
 
 
 particles = ["e", "p"]
