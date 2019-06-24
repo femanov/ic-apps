@@ -12,15 +12,15 @@ from acc_db.db import AccConfig
 
 db = AccConfig(**acc_cfg)
 
-subsys_names = ['linac', 'ring', 'syn.transfer', 'K500.e-ext', 'K500.p-ext', 'K500.com', 'K500.cVEPP3', 'K500.cBEP']
+subsys_names = ['syn', 'linac', 'ring', 'syn.transfer', 'K500.e-ext', 'K500.p-ext', 'K500.com', 'K500.cVEPP3', 'K500.cBEP']
 mode_subsys = {x: db.sys_descendants(x) for x in subsys_names}
 
 
 bline_parts = {
-    'e2v2': ['linac', 'ring', 'syn.transfer', 'K500.e-ext', 'K500.com', 'K500.cBEP'],
-    'p2v2': ['linac', 'ring', 'syn.transfer', 'K500.p-ext', 'K500.com', 'K500.cBEP'],
-    'e2v4': ['linac', 'ring', 'syn.transfer', 'K500.e-ext', 'K500.com', 'K500.cVEPP3'],
-    'p2v4': ['linac', 'ring', 'syn.transfer', 'K500.p-ext', 'K500.com', 'K500.cVEPP3'],
+    'e2v2': ['syn', 'linac', 'ring', 'syn.transfer', 'K500.e-ext', 'K500.com', 'K500.cBEP'],
+    'p2v2': ['syn', 'linac', 'ring', 'syn.transfer', 'K500.p-ext', 'K500.com', 'K500.cBEP'],
+    'e2v4': ['syn', 'linac', 'ring', 'syn.transfer', 'K500.e-ext', 'K500.com', 'K500.cVEPP3'],
+    'p2v4': ['syn', 'linac', 'ring', 'syn.transfer', 'K500.p-ext', 'K500.com', 'K500.cVEPP3'],
 }
 
 
