@@ -47,6 +47,7 @@ class PUSwitcher(QObject):
         self.all_mode = None
 
         self.modes = {
+            'syn': None,
             'linac': None,
             'ring': None,
             'syn.transfer': None,
