@@ -3,7 +3,7 @@
 import time
 from aux.Qt import QtWidgets
 from fwidgets.auxwidgets import BaseGridW
-from acc_db.mode_list import ModeListFull
+from acc_db.mode_list import ModeListCtrl
 from acc_db.sys_tree import SysTree
 from acc_db.chan_kinds import KindTable
 from acc_ctl.mode_ser import ModesClient
@@ -14,7 +14,7 @@ class SaverWidget(BaseGridW):
         super(SaverWidget, self).__init__(parent)
         self.modes_db = ModesDB()
 
-        self.flist = ModeListFull()
+        self.flist = ModeListCtrl()
         self.flist.setFixedSize(900, 800)
         self.grid.addWidget(self.flist, 0, 0, 2, 1)
 
@@ -36,17 +36,17 @@ class SaverWidget(BaseGridW):
         self.selected_kinds = self.kindt.selected()
         self.selected_sys = []
 
-        self.flist.ctrlw.load.connect(self.load_mode)
-        self.flist.ctrlw.archive.connect(self.archive_mode)
-
         self.mode_cli = ModesClient()
         self.mode_cli.modeSaved.connect(self.mode_saved)
         self.mode_cli.modeLoaded.connect(self.mode_loaded)
         self.mode_cli.update.connect(self.update_db)
 
-        self.flist.saveMode.connect(self.save)
-        self.flist.outMsg.connect(self.print_msg)
         self.flist.markMode.connect(self.mode_cli.mark_mode)
+        self.flist.archiveMode.connect(self.archive_mode)
+        self.flist.loadMode.connect(self.load_mode)
+        self.flist.saveMode.connect(self.save)
+        self.flist.setZeros.connect(self.set_zeros)
+        self.flist.outMsg.connect(self.print_msg)
 
         self.flist.listw.modeUpdated.connect(self.mode_cli.ask_update)
 
@@ -56,25 +56,18 @@ class SaverWidget(BaseGridW):
     def kinds_cb(self, kindlist):
         self.selected_kinds = kindlist
 
-    def archive_mode(self):
-        selected_id = self.flist.selected_mode
-        if selected_id is None:
-            self.print_msg('archive: mode not selected')
-            return
-        self.modes_db.archive_mode(selected_id)
+    def archive_mode(self, mode_id):
+        self.modes_db.archive_mode(mode_id)
         self.mode_cli.ask_update()
 
-    def load_mode(self):
-        if self.flist.selected_mode is None:
-            self.print_msg('load: mode not selected')
-            return
+    def load_mode(self, mode_id):
         if not self.selected_kinds:
             self.print_msg('load: no kinds selected')
             return
         if not self.selected_sys:
             self.print_msg('load: no systems selected')
             return
-        self.mode_cli.load_mode(self.flist.selected_mode, self.selected_sys, self.selected_kinds)
+        self.mode_cli.load_mode(mode_id, self.selected_sys, self.selected_kinds)
         self.print_msg('loading...')
 
     def mode_loaded(self, dict_msg):
@@ -92,6 +85,9 @@ class SaverWidget(BaseGridW):
     def update_db(self):
         self.flist.update_modenum()
         self.flist.update_modelist(update_marked=True)
+
+    def set_zeros(self):
+        self.mode_cli.set_zeros(self.selected_sys, self.selected_kinds)
 
     def print_msg(self, msg, srv_time=None):
         if srv_time is None:
