@@ -159,7 +159,7 @@ class DDMWidget(BaseGridW):
         #self.grid.addWidget(QLabel("Automatic Injection/extraction control"), 2, 0, 1, 4, Qt.AlignHCenter)
 
 
-app = QApplication(['DDM_test'])
+app = QApplication(['Doom\'s day machine'])
 
 w = DDMWidget()
 w.show()

@@ -21,6 +21,7 @@ bline_parts = {
     'p2v2': ['syn', 'linac', 'ring', 'syn.transfer', 'K500.p.ext', 'K500.com', 'K500.cBEP'],
     'e2v4': ['syn', 'linac', 'ring', 'syn.transfer', 'K500.e.ext', 'K500.com', 'K500.cVEPP3'],
     'p2v4': ['syn', 'linac', 'ring', 'syn.transfer', 'K500.p.ext', 'K500.com', 'K500.cVEPP3'],
+    'None': [],
 }
 
 
