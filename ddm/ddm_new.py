@@ -4,7 +4,7 @@ from aQt.QtWidgets import QLabel, QApplication
 from aQt.QtCore import Qt
 from aQt import QtGui
 
-from fwidgets import CXSpinBox, CXCheckBox, CXPushButton, CXEventLed, CXTextComboBox, CXLineEdit, CXProgressBar, HLine, BaseGridW
+from fwidgets import CXSwitch, CXSpinBox, CXCheckBox, CXPushButton, CXEventLed, CXTextComboBox, CXLineEdit, CXProgressBar, HLine, BaseGridW
 from training_ctl_widget import TrainingCtlW
 
 from acc_ctl.mode_defs import mode_colors
@@ -125,7 +125,7 @@ class PUSwitch(BaseGridW):
         self.grid.addWidget(self.sw_progress, 5, 0, 1, 2)
 
         self.grid.addWidget(QLabel("allow vepp2k automatics"), 6, 0)
-        self.auto_v2k_ctl = CXCheckBox(cname='cxhw:0.ddm.v2k_auto')
+        self.auto_v2k_ctl = CXSwitch(cname='cxhw:0.ddm.v2k_auto')
         self.grid.addWidget(self.auto_v2k_ctl, 6, 1)
 
 
