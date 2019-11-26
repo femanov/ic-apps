@@ -2,7 +2,7 @@
 
 from aux.Qt import QtCore, QtGui, QtWidgets
 
-from fwidgets.auxwidgets import BaseGridW
+from cxwidgets.auxwidgets import BaseGridW
 from preset_mgr import KickersPresetMgr
 
 class PresetMgrW(BaseGridW):

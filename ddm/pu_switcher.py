@@ -1,7 +1,4 @@
-from aQt.QtCore import QObject, pyqtSignal, QTimer
-from acc_ctl.mode_defs import *
-import numpy as np
-import time
+from cxwidgets.aQt.QtCore import QObject, pyqtSignal, QTimer
 import pycx4.qcda as cda
 
 from acc_ctl.mode_ser import ModesClient

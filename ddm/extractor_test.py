@@ -3,8 +3,8 @@
 import time
 from aux.Qt import QtCore, QtGui, QtWidgets
 
-from fwidgets.fspinbox import FSpinBox
-from fwidgets.fcheckbox import FCheckBox
+from cxwidgets.pspinbox import FSpinBox
+from cxwidgets.pcheckbox import FCheckBox
 
 import extractor
 

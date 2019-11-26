@@ -2,7 +2,7 @@
 
 import time
 from aux.Qt import QtWidgets
-from fwidgets.auxwidgets import BaseGridW
+from cxwidgets.auxwidgets import BaseGridW
 from acc_db.mode_list import ModeListCtrl
 from acc_db.sys_tree import SysTree
 from acc_db.chan_kinds import KindTable

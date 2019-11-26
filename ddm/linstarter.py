@@ -1,5 +1,5 @@
 
-from aQt.QtCore import QObject, pyqtSignal
+from cxwidgets.aQt.QtCore import QObject, pyqtSignal
 import pycx4.qcda as cda
 
 

@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
-from aQt.QtWidgets import QLabel, QApplication
-from aQt.QtCore import Qt
-from aQt import QtGui
+from cxwidgets.aQt.QtWidgets import QLabel, QApplication
+from cxwidgets.aQt.QtCore import Qt
+from cxwidgets.aQt import QtGui
 
-from fwidgets import CXSwitch, CXSpinBox, CXCheckBox, CXPushButton, CXEventLed, CXTextComboBox, CXLineEdit, CXProgressBar, HLine, BaseGridW
+from cxwidgets import CXSwitch, CXSpinBox, CXPushButton, CXEventLed, CXTextComboBox, CXLineEdit, CXProgressBar, HLine, BaseGridW
 from training_ctl_widget import TrainingCtlW
 
 from acc_ctl.mode_defs import mode_colors

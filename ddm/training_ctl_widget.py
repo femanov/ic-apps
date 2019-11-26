@@ -1,6 +1,6 @@
 
 from aux.Qt import QtCore, QtWidgets
-from fwidgets import CXSpinBox, CXCheckBox
+from cxwidgets import CXSpinBox, CXCheckBox
 
 
 class TrainingCtlW(QtWidgets.QWidget):
