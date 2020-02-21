@@ -15,43 +15,44 @@ script_path = op.dirname(op.realpath(__file__))
 
 class InjExtCtl(BaseGridW):
     def __init__(self, parent=None):
-        super(InjExtCtl, self).__init__(parent)
+        super().__init__(parent)
 
-        self.grid.addWidget(QLabel("injection/extraction control"),
+        grid = self.grid
+        grid.addWidget(QLabel("injection/extraction control"),
                             0, 0, 1, 4, Qt.AlignHCenter)
 
-        self.grid.addWidget(QLabel("e-shots"), 1, 0)
+        grid.addWidget(QLabel("e-shots"), 1, 0)
         self.sb_eshots = CXSpinBox(cname='cxhw:0.ddm.eshots')
-        self.grid.addWidget(self.sb_eshots, 1, 1)
+        grid.addWidget(self.sb_eshots, 1, 1)
 
-        self.grid.addWidget(QLabel("p-shots"), 1, 2)
+        grid.addWidget(QLabel("p-shots"), 1, 2)
         self.sb_eshots = CXSpinBox(cname='cxhw:0.ddm.pshots')
-        self.grid.addWidget(self.sb_eshots, 1, 3)
+        grid.addWidget(self.sb_eshots, 1, 3)
 
-        self.grid.addWidget(QLabel("particles"), 2, 0)
+        grid.addWidget(QLabel("particles"), 2, 0)
         self.cb_particles = CXTextComboBox(cname='cxhw:0.ddm.particles', values=['e', 'p'],
                                            icons=[script_path + '/img/electron.png', script_path + '/img/positron.png'])
-        self.grid.addWidget(self.cb_particles, 2, 1)
+        grid.addWidget(self.cb_particles, 2, 1)
 
         self.b_inject = CXPushButton('Inject', cname='cxhw:0.ddm.inject')
-        self.grid.addWidget(self.b_inject, 2, 2)
+        grid.addWidget(self.b_inject, 2, 2)
 
         self.b_extract = CXPushButton('Extract', cname='cxhw:0.ddm.extract')
-        self.grid.addWidget(self.b_extract, 2, 3)
+        grid.addWidget(self.b_extract, 2, 3)
 
         self.b_round = CXPushButton('Round', cname='cxhw:0.ddm.nround')
-        self.grid.addWidget(self.b_round, 3, 0)
+        grid.addWidget(self.b_round, 3, 0)
 
         self.b_auto = CXPushButton('Auto', cname='cxhw:0.ddm.autorun')
-        self.grid.addWidget(self.b_auto, 3, 1)
+        grid.addWidget(self.b_auto, 3, 1)
 
         self.b_stop = CXPushButton('Stop', cname='cxhw:0.ddm.stop')
-        self.grid.addWidget(self.b_stop, 3, 2)
+        grid.addWidget(self.b_stop, 3, 2)
 
 
 class InjExtState(BaseGridW):
     def __init__(self, parent=None):
-        super(InjExtState, self).__init__(parent)
+        super().__init__(parent)
 
         self.grid.addWidget(QLabel("Machne state"), 0, 0, 1, 4, Qt.AlignHCenter)
 
@@ -78,7 +79,7 @@ class InjExtState(BaseGridW):
 
 class K500State(BaseGridW):
     def __init__(self, parent=None):
-        super(K500State, self).__init__(parent)
+        super().__init__(parent)
 
         self.grid.addWidget(QLabel("K500 mode"), 0, 0, 1, 4, Qt.AlignHCenter)
 
@@ -90,7 +91,7 @@ class K500State(BaseGridW):
 
 class PUSwitch(BaseGridW):
     def __init__(self, parent=None):
-        super(PUSwitch, self).__init__(parent)
+        super().__init__(parent)
 
         self.grid.addWidget(QLabel("Particles&users switching"), 0, 0, 1, 2, Qt.AlignHCenter)
 
@@ -131,7 +132,7 @@ class PUSwitch(BaseGridW):
 
 class DDMWidget(BaseGridW):
     def __init__(self, parent=None):
-        super(DDMWidget, self).__init__(parent)
+        super().__init__(parent)
 
         self.extr_trainer = TrainingCtlW()
         self.grid.addWidget(self.extr_trainer, 0, 0)
