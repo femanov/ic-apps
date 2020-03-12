@@ -121,6 +121,7 @@ class Scope(BaseGridW):
         for dk in cmap:
             plts[dk] = graph.addPlot(title=dk, autoDownsample=True)
             plts[dk].disableAutoRange()
+            plts[dk].showGrid(x=True, y=True)
             g_count = 0
             for ck in cmap[dk]:
                 n = '.'.join([srv, dk, ck])
@@ -144,7 +145,6 @@ class Scope(BaseGridW):
         self.curvs[chan.name].setData(chan.val)
 
     def rerange(self):
-        print('updating ranges')
         for dk in cmap:
             g_ymax, g_ymin = None, None
             for ck in cmap[dk]:
@@ -162,7 +162,7 @@ class Scope(BaseGridW):
                     if ymin < g_ymin:
                         g_ymin = ymin
             self.plts[dk].setYRange(g_ymin, g_ymax, padding=0.05)
-            self.plts[dk].setXRange(0, self.chans[n].nelems)
+            self.plts[dk].setXRange(0, self.chans[n].nelems, padding=0)
 
     # def add_curve(self, name):
     #     pass
