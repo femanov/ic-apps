@@ -1,11 +1,12 @@
+import sys
+if "pycx4.qcda" in sys.modules:
+    import pycx4.qcda as cda
+elif "pycx4.pycda" in sys.modules:
+    import pycx4.pycda as cda
 
-from PyQt5.QtCore import QObject, pyqtSignal, QTimer
-
-from linstarter import  LinStarter
+from linstarter import LinStarter
 from extractor import Extractor
 from pu_switcher import PUSwitcher
-
-import pycx4.qcda as cda
 from acc_ctl.mode_ser import ModesClient
 from acc_ctl.linbeamctl import LinBeamCtl
 
@@ -22,9 +23,9 @@ stateMsg = ["Stopped!", "Preparing for injection", "Injecting", "Injection finis
 run_modes = ["idle", "single-action", "single-cycle", "auto-cycle"]
 
 
-class InjExtLoop(QObject):
+class InjExtLoop:
     def __init__(self):
-        QObject.__init__(self)
+        super().__init__()
 
         self.particles = "e"
         self.req_particles = None
@@ -47,7 +48,7 @@ class InjExtLoop(QObject):
         self.extractor.extractionDone.connect(self.next_state)
         self.pu_ctl.switching_done.connect(self.next_state)
 
-        self.timer = QTimer()
+        self.timer = cda.Timer()
 
         self.states = [
             self.__idle,

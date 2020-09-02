@@ -1,17 +1,17 @@
-from cxwidgets.aQt.QtCore import QObject, pyqtSignal, QTimer
-import pycx4.qcda as cda
+import sys
+if "pycx4.qcda" in sys.modules:
+    import pycx4.qcda as cda
+elif "pycx4.pycda" in sys.modules:
+    import pycx4.pycda as cda
 
 from acc_ctl.mode_ser import ModesClient
 from acc_ctl.k500modes import K500Director
-
-from settings.db import acc_cfg
 from acc_db.db import AccConfig
 
-db = AccConfig(**acc_cfg)
+db = AccConfig()
 
 subsys_names = ['syn', 'linac', 'ring', 'syn.transfer', 'K500.e.ext', 'K500.p.ext', 'K500.com', 'K500.cVEPP3', 'K500.cBEP']
 mode_subsys = {x: db.sys_descendants(x) for x in subsys_names}
-
 
 bline_parts = {
     'e2v2': ['syn', 'linac', 'ring', 'syn.transfer', 'K500.e.ext', 'K500.com', 'K500.cBEP'],
@@ -22,11 +22,11 @@ bline_parts = {
 }
 
 
-class PUSwitcher(QObject):
-    switching_done = pyqtSignal()
+class PUSwitcher:
+    switching_done = cda.Signal()
 
     def __init__(self, *args, **kwargs):
-        super(PUSwitcher, self).__init__(*args)
+        super().__init__(*args)
 
         self.mode_ctl = kwargs.get('mode_ctl', ModesClient())
         self.k500ctl = kwargs.get('k500ctl', K500Director())
@@ -57,7 +57,7 @@ class PUSwitcher(QObject):
         }
 
         self.wait_remag = False
-        self.timer = QTimer()
+        self.timer = cda.Timer()
 
     def what2switch(self, mode):
         bline = bline_parts[mode]

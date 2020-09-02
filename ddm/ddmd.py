@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
-import sys
-from aux.service_daemon import QtService
+from aux.service_daemon import CXService
 from injext_looper import InjExtLoop
 
 
-class DDMService(QtService):
+class DDMService(CXService):
     def main(self):
         self.injext_loop = InjExtLoop()
 

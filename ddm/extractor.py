@@ -1,15 +1,14 @@
-
-from PyQt5.QtCore import QObject, pyqtSignal, QTimer
-import pycx4.qcda as cda
+import sys
+if "pycx4.qcda" in sys.modules:
+    import pycx4.qcda as cda
+elif "pycx4.pycda" in sys.modules:
+    import pycx4.pycda as cda
 
 # exrtaction control channels
 # canhw:19.xfr_d16_20.do_shot
 # canhw:19.xfr_d16_20.was_start
 # canhw:19.xfr_d16_20.ones_stop
 # canhw:19.ic.extractor.clockSrc
-
-# no chan to check extraction state !?
-
 clock_names = {
     "off":    0,
     "vepp2k": 1,
@@ -18,17 +17,14 @@ clock_names = {
 }
 
 
-class Extractor(QObject):
-
-    extractionDone = pyqtSignal()
-    unexpectedShot = pyqtSignal()
-
-    trainingShot = pyqtSignal()
-    trainingStopped = pyqtSignal()
+class Extractor:
+    extractionDone = cda.Signal()
+    unexpectedShot = cda.Signal()
+    trainingShot = cda.Signal()
+    trainingStopped = cda.Signal()
 
     def __init__(self, parent=None):
-        QObject.__init__(self, parent)
-
+        super().__init__(self, parent)
         self.extract_request = False
         self.training_shots = False
         self.training_interval = 3
@@ -43,7 +39,7 @@ class Extractor(QObject):
         self.c_was_shot.valueMeasured.connect(self.was_shot_proc)
         self.c_clock_src.valueChanged.connect(self.clock_src_update)
 
-        self.timer = QTimer()
+        self.timer = cda.Timer()
 
     def was_shot_proc(self, chan):
         if chan.val == 0:
@@ -74,7 +70,6 @@ class Extractor(QObject):
         self.stop_training()
         self.extract_request = True
         self.do_shot()
-
 
     def start_training(self):
         if self.training_shots:

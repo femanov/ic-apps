@@ -1,7 +1,8 @@
-
-from cxwidgets.aQt.QtCore import QObject, pyqtSignal
-import pycx4.qcda as cda
-
+import sys
+if "pycx4.qcda" in sys.modules:
+    import pycx4.qcda as cda
+elif "pycx4.pycda" in sys.modules:
+    import pycx4.pycda as cda
 
 cx_srv = 'canhw:19'
 prefix = cx_srv + '.'
@@ -10,18 +11,16 @@ runmodes = {
     'continous': 0,
     'counter':   1
 }
-
-#CX version names:
 # syn_ie4.bum_going - not yet used, do i need it?
 
 
-class LinStarter(QObject):
-    runmodeChanged = pyqtSignal(str)
-    nshotsChanged = pyqtSignal(int)
-    runDone = pyqtSignal()
+class LinStarter:
+    runmodeChanged = cda.Signal(str)
+    nshotsChanged = cda.Signal(int)
+    runDone = cda.Signal()
 
     def __init__(self):
-        super(LinStarter, self).__init__()
+        super().__init__()
 
         # state variables.
         self.runmode = None
@@ -48,7 +47,6 @@ class LinStarter(QObject):
         self.c_pshots = cda.DChan('cxhw:0.ddm.pshots')
         self.c_eshots.valueChanged.connect(self.shots_update)
         self.c_pshots.valueChanged.connect(self.shots_update)
-
 
     def shots_update(self, chan):
         if chan is self.c_eshots:

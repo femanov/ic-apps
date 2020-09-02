@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 import time
 from aux.Qt import QtWidgets
 from cxwidgets.auxwidgets import BaseGridW
@@ -8,6 +7,7 @@ from acc_db.sys_tree import SysTree
 from acc_db.chan_kinds import KindTable
 from acc_ctl.mode_ser import ModesClient
 from acc_db.db import ModesDB
+
 
 class SaverWidget(BaseGridW):
     def __init__(self, parent=None):
