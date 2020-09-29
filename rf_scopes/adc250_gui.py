@@ -7,10 +7,13 @@ import numpy as np
 from cxwidgets import BaseGridW, HLine
 import pycx4.qcda as cda
 from cxwidgets import CXSwitch, CXSpinBox, CXPushButton, CXIntComboBox, CXCheckBox
-
+import json
+import time
 
 srv = 'cxhw:15'
 cmap = {
+    'adc250_8a': {'line0': 'kls1_hv', 'line1': 'kls2_hv', 'line2': 'kls3_hv', 'line3': 'kls4_hv'},
+    'adc250_8c': {'line0': 'kls1_in', 'line1': 'kls2_in', 'line2': 'kls3_in', 'line3': 'kls4_in'},
     'adc250_8e': {'line0': 's1_in', 'line1': 's1_out', 'line2': 's2_in', 'line3': 's2_out'},
     'adc250_90': {'line0': 's3_in', 'line1': 's3_out', 'line2': 's4_in', 'line3': 's4_out'},
     'adc250_92': {'line0': 's5_in', 'line1': 's5_out', 'line2': 's6_in', 'line3': 's6_out'},
@@ -22,6 +25,24 @@ cmap = {
 }
 
 c_sign = {'s4_in', 's6_in', 's8_in', 's10_out'}
+
+
+class ScopesChansContainer:
+    def __init__(self):
+        self.signals = {}
+        self.chans = {}
+        self.chans_map = {}
+
+        for dk in cmap:
+            lines = {}
+            for ck in cmap[dk]:
+                n = '.'.join([srv, dk, ck])
+                csign = True if cmap[dk][ck] in c_sign else False
+                c = cda.VChan(n, dtype=cda.DTYPE_SINGLE, max_nelems=783155, change_sign=csign)
+                lines[ck] = c
+                self.signals[cmap[dk][ck]] = c
+                self.chans[n] = c
+            self.chans_map[dk] = lines
 
 
 class ADC4x250_settings(BaseGridW):
@@ -86,6 +107,30 @@ class ScopeSettings(BaseGridW):
                 r_count += 2
 
 
+class ScopesDataTools(BaseGridW):
+    def __init__(self):
+        super().__init__()
+        self.btn_get_json = QPushButton('get as json')
+        self.grid.addWidget(self.btn_get_json, 0, 0)
+        self.btn_get_json.clicked.connect(self.save_data_json)
+
+        self.grid.addWidget(QLabel('Signals input'), 0, 1)
+
+        lc = 1
+        self.sig_checkbs = {}
+        for ks in scope_chans.signals:
+            scb = QCheckBox(ks)
+            self.grid.addWidget(scb, lc, 1)
+            self.sig_checkbs[ks] = scb
+            lc += 1
+
+    def save_data_json(self):
+        data = {k: scope_chans.signals[k].val.tolist() for k in self.sig_checkbs if self.sig_checkbs[k].isChecked()}
+        f = open("rf_sc_" + time.strftime("%Y-%m-%d_%H-%M-%S") + ".json", 'w')
+        json.dump(data, f)
+        f.close()
+
+
 class ScopesTools(BaseGridW):
     def __init__(self):
         super().__init__()
@@ -97,15 +142,23 @@ class ScopesTools(BaseGridW):
         self.grid.addWidget(self.btn_settings, 0, 1)
         self.btn_settings.clicked.connect(self.show_settings)
 
-        self.grid.addItem(QSpacerItem(1500, 50, hPolicy=QSizePolicy.Maximum), 0, 2)
+        self.btn_data = QPushButton('data')
+        self.grid.addWidget(self.btn_data, 0, 2)
+        self.btn_data.clicked.connect(self.show_data_tools)
+
+        self.grid.addItem(QSpacerItem(1500, 50, hPolicy=QSizePolicy.Maximum), 0, 3)
 
     def show_settings(self):
         self.sw = ScopeSettings()
         self.sw.show()
 
+    def show_data_tools(self):
+        self.data_tk = ScopesDataTools()
+        self.data_tk.show()
+
 
 class Scope(BaseGridW):
-    def __init__(self):
+    def __init__(self, scope_cs):
         super().__init__()
 
         self.tool_bar = ScopesTools()
@@ -114,8 +167,8 @@ class Scope(BaseGridW):
 
         self.pens = [(255, 0, 0), (0, 255, 0), (255, 0, 255), (255, 255, 0)]
         graph = pg.GraphicsLayoutWidget(parent=self)
+        chans_map = scope_cs.chans_map
         plts = {}
-        chans = {}
         curvs = {}
         c_count = 0
         for dk in cmap:
@@ -124,12 +177,9 @@ class Scope(BaseGridW):
             plts[dk].showGrid(x=True, y=True)
             g_count = 0
             for ck in cmap[dk]:
-                n = '.'.join([srv, dk, ck])
-                csign = True if cmap[dk][ck] in c_sign else False
-                c = cda.VChan(n, dtype=cda.CXDTYPE_SINGLE, max_nelems=783155, change_sign=csign)
+                c = chans_map[dk][ck]
                 c.valueMeasured.connect(self.update_plot)
-                curvs[n] = plts[dk].plot(c.val, pen=self.pens[g_count])
-                chans[n] = c
+                curvs[c.name] = plts[dk].plot(c.val, pen=self.pens[g_count])
                 g_count += 1
 
             c_count += 1
@@ -137,9 +187,10 @@ class Scope(BaseGridW):
                 graph.nextRow()
                 c_count = 0
 
-        self.graph, self.plts, self.curvs, self.chans = graph, plts, curvs, chans
+        self.graph, self.plts, self.curvs, self.chans = graph, plts, curvs, scope_cs.chans
         # put in grid
         self.grid.addWidget(graph, 1, 0)
+
 
     def update_plot(self, chan):
         self.curvs[chan.name].setData(chan.val)
@@ -171,7 +222,10 @@ class Scope(BaseGridW):
 if __name__ == '__main__':
     from sys import argv, exit
     app = QApplication(argv)
-    win = Scope()
+
+    scope_chans = ScopesChansContainer()
+
+    win = Scope(scope_chans)
     win.resize(1980, 1200)
     win.show()
     exit(app.exec_())
