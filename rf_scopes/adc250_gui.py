@@ -4,7 +4,7 @@ from PyQt5 import QtCore, QtGui
 from PyQt5.QtWidgets import *
 import pyqtgraph as pg
 import numpy as np
-from cxwidgets import BaseGridW, HLine
+from cxwidgets import BaseGridW, HLine, VLine
 import pycx4.qcda as cda
 from cxwidgets import CXSwitch, CXSpinBox, CXPushButton, CXIntComboBox, CXCheckBox
 import json
@@ -19,12 +19,22 @@ cmap = {
     'adc250_92': {'line0': 's5_in', 'line1': 's5_out', 'line2': 's6_in', 'line3': 's6_out'},
     'adc250_94': {'line0': 's7_in', 'line1': 's7_out', 'line2': 's8_in', 'line3': 's8_out'},
     'adc250_96': {'line0': 's9_in', 'line1': 's9_out', 'line2': 's10_in', 'line3': 's10_out'},
-    'adc250_98': {'line0': 's11_in_ref', 'line1': 's11_out', 'line2': 's12_in_ref', 'line3': 's12_out'},
-    'adc250_9a': {'line0': 's13_in_ref', 'line1': 's13_out_ref', 'line2': 's14_in_ref', 'line3': 's14_out_ref'},
+    'adc250_98': {'line0': 's11_in', 'line1': 's11_out', 'line2': 's12_in', 'line3': 's12_out'},
+    'adc250_9a': {'line0': 's13_in', 'line1': 's13_out', 'line2': 's14_in', 'line3': 's14_out'},
     'adc250_9c': {'line0': 'grp_in', 'line1': '', 'line2': 'gun_hv', 'line3': 'beam'},
 }
 
-c_sign = {'s4_in', 's6_in', 's8_in', 's10_out'}
+p_sign = {'s4_in', 's6_in', 's8_in', 's10_out'}
+c_sign = set()
+for ks in cmap:
+    for kd in cmap[ks]:
+        if cmap[ks][kd].startswith('s') and cmap[ks][kd] not in p_sign:
+            c_sign.add(cmap[ks][kd])
+c_sign.add('gun_hv')
+
+f = open('rf_power_calibr.json')
+rf_pwr_clb = json.load(f)
+f.close()
 
 
 class ScopesChansContainer:
@@ -38,15 +48,14 @@ class ScopesChansContainer:
             for ck in cmap[dk]:
                 n = '.'.join([srv, dk, ck])
                 csign = True if cmap[dk][ck] in c_sign else False
-                c = cda.VChan(n, dtype=cda.DTYPE_SINGLE, max_nelems=783155, change_sign=csign)
+                c = cda.VPChan(n, dtype=cda.DTYPE_SINGLE, max_nelems=783155, change_sign=csign)
                 lines[ck] = c
                 self.signals[cmap[dk][ck]] = c
                 self.chans[n] = c
             self.chans_map[dk] = lines
 
-
 class ADC4x250_settings(BaseGridW):
-    def __init__(self, scope_dev):
+    def __init__(self, scope_dev, lines):
         super().__init__()
 
         self.grid.addWidget(QLabel('scope: ' + scope_dev))
@@ -91,6 +100,7 @@ class ADC4x250_settings(BaseGridW):
             grid4.addWidget(CXIntComboBox(cname=scope_dev + '.range' + str(x),
                                           values={0: '0.5 V', 1: '1 V', 2: '2 V', 3: '4 V'}
                                           ), 0, x)
+            grid4.addWidget(QLabel(lines['line' + str(x)]), 1, x)
 
 
 class ScopeSettings(BaseGridW):
@@ -99,7 +109,7 @@ class ScopeSettings(BaseGridW):
 
         c_count, r_count = 0, 0
         for k in cmap:
-            self.grid.addWidget(ADC4x250_settings(srv + '.' + k), r_count, c_count)
+            self.grid.addWidget(ADC4x250_settings(srv + '.' + k, cmap[k]), r_count, c_count)
             c_count += 1
             if c_count == 2:
                 self.grid.addWidget(HLine(), r_count + 1, 0, 1, 2)
@@ -114,6 +124,14 @@ class ScopesDataTools(BaseGridW):
         self.grid.addWidget(self.btn_get_json, 0, 0)
         self.btn_get_json.clicked.connect(self.save_data_json)
 
+        self.btn_get_bg = QPushButton('get background')
+        self.grid.addWidget(self.btn_get_bg, 1, 0)
+        self.btn_get_bg.clicked.connect(self.get_background)
+
+        self.btn_show_sig = QPushButton('show signals')
+        self.grid.addWidget(self.btn_show_sig, 2, 0)
+        self.btn_show_sig.clicked.connect(self.show_signals)
+
         self.grid.addWidget(QLabel('Signals input'), 0, 1)
 
         lc = 1
@@ -124,11 +142,25 @@ class ScopesDataTools(BaseGridW):
             self.sig_checkbs[ks] = scb
             lc += 1
 
+        self.sws = {}
+
     def save_data_json(self):
         data = {k: scope_chans.signals[k].val.tolist() for k in self.sig_checkbs if self.sig_checkbs[k].isChecked()}
         f = open("rf_sc_" + time.strftime("%Y-%m-%d_%H-%M-%S") + ".json", 'w')
         json.dump(data, f)
         f.close()
+
+    def get_background(self):
+        for k in self.sig_checkbs:
+            if self.sig_checkbs[k].isChecked():
+                scope_chans.signals[k].getBg(100)
+
+    def show_signals(self):
+        for k in self.sig_checkbs:
+            if self.sig_checkbs[k].isChecked():
+                self.sws[k] = SignalW(scope_chans.signals[k], k)
+                self.sws[k].show()
+
 
 
 class ScopesTools(BaseGridW):
@@ -155,6 +187,7 @@ class ScopesTools(BaseGridW):
     def show_data_tools(self):
         self.data_tk = ScopesDataTools()
         self.data_tk.show()
+
 
 
 class Scope(BaseGridW):
@@ -193,7 +226,7 @@ class Scope(BaseGridW):
 
 
     def update_plot(self, chan):
-        self.curvs[chan.name].setData(chan.val)
+        self.curvs[chan.name].setData(chan.aval)
 
     def rerange(self):
         for dk in cmap:
