@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from aux.service_daemon import CXService
+from cservice import CXService
 from injext_looper import InjExtLoop
 
 
