@@ -178,7 +178,10 @@ class ScopesTools(BaseGridW):
         self.grid.addWidget(self.btn_data, 0, 2)
         self.btn_data.clicked.connect(self.show_data_tools)
 
-        self.grid.addItem(QSpacerItem(1500, 50, hPolicy=QSizePolicy.Maximum), 0, 3)
+        self.legends_cb = QCheckBox('showLegends')
+        self.grid.addWidget(self.legends_cb, 0, 3)
+
+        self.grid.addItem(QSpacerItem(1500, 20, hPolicy=QSizePolicy.Maximum), 0, 4)
 
     def show_settings(self):
         self.sw = ScopeSettings()
@@ -197,22 +200,25 @@ class Scope(BaseGridW):
         self.tool_bar = ScopesTools()
         self.grid.addWidget(self.tool_bar, 0, 0)
         self.tool_bar.btn_resize.clicked.connect(self.rerange)
+        self.tool_bar.legends_cb.stateChanged.connect(self.setLegendsVisible)
 
         self.pens = [(255, 0, 0), (0, 255, 0), (255, 0, 255), (255, 255, 0)]
         graph = pg.GraphicsLayoutWidget(parent=self)
         chans_map = scope_cs.chans_map
         plts = {}
         curvs = {}
+        legends = {}
         c_count = 0
         for dk in cmap:
-            plts[dk] = graph.addPlot(title=dk, autoDownsample=True)
+            plts[dk] = graph.addPlot() #(title=dk, autoDownsample=True)
             plts[dk].disableAutoRange()
             plts[dk].showGrid(x=True, y=True)
+            legends[dk] = plts[dk].addLegend(offset=(1, 1), rowCount=1, colCount=4, horSpacing=18)
             g_count = 0
             for ck in cmap[dk]:
                 c = chans_map[dk][ck]
                 c.valueMeasured.connect(self.update_plot)
-                curvs[c.name] = plts[dk].plot(c.val, pen=self.pens[g_count])
+                curvs[c.name] = plts[dk].plot(c.val, pen=self.pens[g_count], name=cmap[dk][ck])
                 g_count += 1
 
             c_count += 1
@@ -220,7 +226,7 @@ class Scope(BaseGridW):
                 graph.nextRow()
                 c_count = 0
 
-        self.graph, self.plts, self.curvs, self.chans = graph, plts, curvs, scope_cs.chans
+        self.graph, self.plts, self.legends, self.curvs, self.chans = graph, plts, legends, curvs, scope_cs.chans
         # put in grid
         self.grid.addWidget(graph, 1, 0)
 
@@ -248,8 +254,9 @@ class Scope(BaseGridW):
             self.plts[dk].setYRange(g_ymin, g_ymax, padding=0.05)
             self.plts[dk].setXRange(0, self.chans[n].nelems, padding=0)
 
-    # def add_curve(self, name):
-    #     pass
+    def setLegendsVisible(self, state):
+        for k in self.legends:
+            self.legends[k].setVisible(state)
 
 
 if __name__ == '__main__':
