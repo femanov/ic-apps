@@ -23,8 +23,8 @@ class Extractor:
     trainingShot = cda.Signal()
     trainingStopped = cda.Signal()
 
-    def __init__(self, parent=None):
-        super().__init__(self, parent)
+    def __init__(self):
+        super().__init__()
         self.extract_request = False
         self.training_shots = False
         self.training_interval = 3
