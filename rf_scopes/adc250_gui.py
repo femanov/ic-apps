@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-from PyQt5 import QtCore, QtGui
 from PyQt5.QtWidgets import *
 import pyqtgraph as pg
 import numpy as np
@@ -53,6 +52,7 @@ class ScopesChansContainer:
                 self.signals[cmap[dk][ck]] = c
                 self.chans[n] = c
             self.chans_map[dk] = lines
+
 
 class ADC4x250_settings(BaseGridW):
     def __init__(self, scope_dev, lines):
@@ -193,7 +193,6 @@ class ScopesTools(BaseGridW):
         self.data_tk.show()
 
 
-
 class Scope(BaseGridW):
     def __init__(self, scope_cs):
         super().__init__()
@@ -230,7 +229,6 @@ class Scope(BaseGridW):
         self.graph, self.plts, self.legends, self.curvs, self.chans = graph, plts, legends, curvs, scope_cs.chans
         # put in grid
         self.grid.addWidget(graph, 1, 0)
-
 
     def update_plot(self, chan):
         self.curvs[chan.name].setData(chan.aval)
