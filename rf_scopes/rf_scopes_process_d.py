@@ -22,9 +22,9 @@ class RFScopesProcService(CXService):
         self.rf_proc = RFScopesProc()
 
 
-s = RFScopesProcService('rf_scopes_proc')
+#s = RFScopesProcService('rf_scopes_proc')
 
 
-#rf_proc = RFScopesProc()
+rf_proc = RFScopesProc()
 
-#cda.main_loop()
+cda.main_loop()
