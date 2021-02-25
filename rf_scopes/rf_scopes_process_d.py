@@ -2,6 +2,7 @@
 
 import pycx4.pycda as cda
 from cservice import CXService
+from time import sleep
 
 class RFScopesProc:
     def __init__(self):
@@ -12,7 +13,8 @@ class RFScopesProc:
         self.shot_c.setValue(1)
 
     def shot_done(self, chan):
-        self.shot_c.setValue(1)
+        sleep(0.2)
+        self.shot_c.setValue(self.shot_c.val+1)
         print("shot done")
 
 class RFScopesProcService(CXService):
@@ -21,3 +23,8 @@ class RFScopesProcService(CXService):
 
 
 s = RFScopesProcService('rf_scopes_proc')
+
+
+#rf_proc = RFScopesProc()
+
+#cda.main_loop()
