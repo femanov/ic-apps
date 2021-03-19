@@ -13,7 +13,7 @@ class RFScopesProc:
         self.shot_c.setValue(1)
 
     def shot_done(self, chan):
-        sleep(0.5)
+        #sleep(0.5)
         self.shot_c.setValue(self.shot_c.val+1)
         print("shot done")
 
