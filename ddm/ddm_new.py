@@ -132,17 +132,14 @@ class PUSwitch(BaseGridW):
 class DDMWidget(BaseGridW):
     def __init__(self, parent=None):
         super().__init__(parent)
-
         self.extr_trainer = TrainingCtlW()
         self.grid.addWidget(self.extr_trainer, 0, 0)
 
         self.grid.addWidget(HLine(), 1, 0)
-
         self.inj_ext = InjExtCtl()
         self.grid.addWidget(self.inj_ext, 2, 0)
 
         self.grid.addWidget(HLine(), 3, 0)
-
         self.inj_ext_st = InjExtState()
         self.grid.addWidget(self.inj_ext_st, 4, 0)
 
