@@ -18,8 +18,7 @@ class InjExtCtl(BaseGridW):
         super().__init__(parent)
 
         grid = self.grid
-        grid.addWidget(QLabel("injection/extraction control"),
-                            0, 0, 1, 4, Qt.AlignHCenter)
+        grid.addWidget(QLabel("injection/extraction control"), 0, 0, 1, 4, Qt.AlignHCenter)
 
         grid.addWidget(QLabel("e-shots"), 1, 0)
         self.sb_eshots = CXSpinBox(cname='cxhw:0.ddm.eshots')
@@ -105,19 +104,19 @@ class PUSwitch(BaseGridW):
 
         self.b_e2v4 = CXPushButton('-->e2v4', cname='cxhw:0.ddm.e2v4')
         self.grid.addWidget(self.b_e2v4, 2, 0)
-        self.b_e2v4.setStyleSheet('QPushButton {background-color: ' + mode_colors['e2v4'] + '; }')
+        self.b_e2v4.setStyleSheet('background-color:' + mode_colors['e2v4'] + ';')
 
         self.b_p2v4 = CXPushButton('-->p2v4', cname='cxhw:0.ddm.p2v4')
         self.grid.addWidget(self.b_p2v4, 3, 0)
-        self.b_p2v4.setStyleSheet('QPushButton {background-color: ' + mode_colors['p2v4'] + '; }')
+        self.b_p2v4.setStyleSheet('background-color:' + mode_colors['p2v4'] + ';')
 
         self.b_e2v2 = CXPushButton('-->e2v2', cname='cxhw:0.ddm.e2v2')
         self.grid.addWidget(self.b_e2v2, 2, 1)
-        self.b_e2v2.setStyleSheet('QPushButton {background-color: ' + mode_colors['e2v2'] + '; }')
+        self.b_e2v2.setStyleSheet('background-color:' + mode_colors['e2v2'] + ';')
 
         self.b_p2v2 = CXPushButton('-->p2v2', cname='cxhw:0.ddm.p2v2')
         self.grid.addWidget(self.b_p2v2, 3, 1)
-        self.b_p2v2.setStyleSheet('QPushButton {background-color: ' + mode_colors['p2v2'] + '; }')
+        self.b_p2v2.setStyleSheet('background-color:' + mode_colors['p2v2'] + ';')
 
         self.grid.addWidget(QLabel("current state"), 4, 0, 1, 2, Qt.AlignHCenter)
 
