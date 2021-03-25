@@ -14,15 +14,15 @@ class RFScopesProc:
         self.scopes_update_c.valueMeasured.connect(self.shot_done)
         self.shot_c.setValue(1)
         self.timer = cda.Timer()
-        self.timer.singleShot(1000)
+        self.timer.singleShot(1000, proc=self.timeout_proc)
         self.t0 = time.time()
 
     def shot_done(self, chan):
+        print("shot done")
         self.shot_c.setValue(self.shot_c.val+1)
         self.timer.singleShot(1000)
 
-
-    def timeout_proc(self):
+    def timeout_proc(self, timer):
         print('timed out? resetting', time.time() - self.t0)
         self.shot_c.setValue(1)
         self.t0 = time.time()
