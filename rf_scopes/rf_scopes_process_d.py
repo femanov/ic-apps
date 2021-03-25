@@ -18,7 +18,8 @@ class RFScopesProc:
         self.t0 = time.time()
 
     def shot_done(self, chan):
-        print("shot done")
+        #print("shot done")
+        time.sleep(0.2)
         self.shot_c.setValue(self.shot_c.val+1)
         self.timer.singleShot(1000)
 
@@ -34,9 +35,9 @@ class RFScopesProcService(CXService):
         self.rf_proc = RFScopesProc()
 
 
-#s = RFScopesProcService('rf_scopes_proc')
+s = RFScopesProcService('rf_scopes_proc')
 
 
-rf_proc = RFScopesProc()
+#rf_proc = RFScopesProc()
 
-cda.main_loop()
+#cda.main_loop()
