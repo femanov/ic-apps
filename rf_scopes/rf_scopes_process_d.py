@@ -2,20 +2,27 @@
 
 import pycx4.pycda as cda
 from cservice import CXService
-from time import sleep
+import time
 
 class RFScopesProc:
     def __init__(self):
         self.shot_c = cda.IChan("cxhw:15.l_timer.shot", on_update=True)
-
         self.scopes_update_c = cda.IChan("cxhw:15.adc250_9a.marker", on_update=True)
         self.scopes_update_c.valueMeasured.connect(self.shot_done)
         self.shot_c.setValue(1)
+        self.timer = cda.Timer()
+        self.timer.singleShot(1000)
+        self.t0 = time.time()
 
     def shot_done(self, chan):
-        #sleep(0.5)
         self.shot_c.setValue(self.shot_c.val+1)
-        print("shot done")
+        self.timer.singleShot(1000)
+
+
+    def timeout_proc(self):
+        print('timed out? resetting', time.time() - self.t0)
+        self.shot_c.setValue(1)
+        self.t0 = time.time()
 
 class RFScopesProcService(CXService):
     def main(self):
