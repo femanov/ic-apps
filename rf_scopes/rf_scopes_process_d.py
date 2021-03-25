@@ -3,6 +3,9 @@
 import pycx4.pycda as cda
 from cservice import CXService
 import time
+import signal
+signal.signal(signal.SIGINT, signal.SIG_DFL)
+
 
 class RFScopesProc:
     def __init__(self):
