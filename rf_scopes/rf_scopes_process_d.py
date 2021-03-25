@@ -26,6 +26,8 @@ class RFScopesProc:
         print('timed out? resetting', time.time() - self.t0)
         self.shot_c.setValue(1)
         self.t0 = time.time()
+        self.timer.singleShot(1000)
+
 
 class RFScopesProcService(CXService):
     def main(self):
