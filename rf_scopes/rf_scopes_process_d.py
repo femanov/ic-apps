@@ -22,7 +22,7 @@ class RFScopesProc:
         self.shot_c.setValue(1)
 
         self.phase_c = cda.IChan(srv + '.' + "l_timer.phase", on_update=True)
-        self.phase_c.valueMeasured.connect(self.print_val)
+        #self.phase_c.valueMeasured.connect(self.print_val)
         self.gatestat_c = cda.IChan(srv + '.' + "l_timer.gatestat", on_update=True)
         #self.gatestat_c.valueMeasured.connect(self.print_val)
         self.event_c = cda.IChan(srv + '.' + "l_timer.event", on_update=True)
