@@ -28,7 +28,6 @@ class RFScopesProc:
         self.event_c = cda.IChan(srv + '.' + "l_timer.event", on_update=True)
         self.event_c.valueMeasured.connect(self.print_val)
 
-
         self.timer = cda.Timer()
         self.timer.singleShot(2000, proc=self.timeout_proc)
         self.t0 = time.time()
@@ -43,9 +42,7 @@ class RFScopesProc:
             self.shot_done(None)
 
     def shot_done(self, timer):
-        print("shot done")
         self.updated_count = 0
-        #time.sleep(0.1)
         self.shot_c.setValue(self.shot_c.val+1)
         self.timer.singleShot(2000)
 
@@ -61,9 +58,9 @@ class RFScopesProcService(CXService):
         self.rf_proc = RFScopesProc()
 
 
-#s = RFScopesProcService('rf_scopes_proc')
+s = RFScopesProcService('rf_scopes_proc')
 
 
-rf_proc = RFScopesProc()
+#rf_proc = RFScopesProc()
 
-cda.main_loop()
+#cda.main_loop()
