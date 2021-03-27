@@ -24,9 +24,9 @@ class RFScopesProc:
         self.phase_c = cda.IChan(srv + '.' + "l_timer.phase", on_update=True)
         self.phase_c.valueMeasured.connect(self.print_val)
         self.gatestat_c = cda.IChan(srv + '.' + "l_timer.gatestat", on_update=True)
-        self.gatestat_c.valueMeasured.connect(self.print_val)
+        #self.gatestat_c.valueMeasured.connect(self.print_val)
         self.event_c = cda.IChan(srv + '.' + "l_timer.event", on_update=True)
-        self.event_c.valueMeasured.connect(self.print_val)
+        #self.event_c.valueMeasured.connect(self.print_val)
 
         self.timer = cda.Timer()
         self.timer.singleShot(2000, proc=self.timeout_proc)
