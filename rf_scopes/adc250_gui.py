@@ -70,7 +70,7 @@ class ADC4x250_settings(BaseGridW):
         grid3 = QGridLayout()
         self.grid.addLayout(grid3, 3, 0)
         grid3.addWidget(CXPushButton('Calibrate', cname=scope_dev + '.calibrate'), 0, 0)
-        grid3.addWidget(CXPushButton('Calibr.rst', cname=scope_dev + '.fgt_clb'), 0, 1)
+        #grid3.addWidget(CXPushButton('Calibr.rst', cname=scope_dev + '.fgt_clb'), 0, 1)
         grid3.addWidget(CXPushButton('shot', cname=scope_dev + '.shot'), 0, 2)
         grid3.addWidget(CXPushButton('stop', cname=scope_dev + '.shot'), 0, 3)
 

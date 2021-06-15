@@ -9,8 +9,6 @@ from acc_ctl.mode_defs import *
 from linstarter import LinStarter, runmodes
 from extractor import Extractor
 
-
-
 _states = [
     'idle',
     'preinject',
@@ -44,7 +42,7 @@ class ICLoop(QObject):
         self.particles = 'e'  #  'e', 'p'
         self.stored_particles = None  # None, 'e', 'p'
         self.requested_particles = None  # None (means do not switch), 'e', 'p'
-        self.beam_user = None # None, 'v2', 'v4'
+        self.beam_user = None  # None, 'v2', 'v4'
         self.requested_beam_user = None
         self.requested_runmode = None
 

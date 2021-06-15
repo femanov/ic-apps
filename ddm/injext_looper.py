@@ -49,6 +49,7 @@ class InjExtLoop:
         self.pu_ctl.switching_done.connect(self.next_state)
 
         self.timer = cda.Timer()
+        self.calibr_timer = cda.Timer()
 
         self.states = [
             self.__idle,
@@ -173,6 +174,7 @@ class InjExtLoop:
         pass
 
     def __preinject(self):
+
         if self.req_particles is not None:
             self.set_particles(self.req_particles)
             self.req_particles = None
