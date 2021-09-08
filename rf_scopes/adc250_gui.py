@@ -9,9 +9,12 @@ from cxwidgets import CXSwitch, CXSpinBox, CXPushButton, CXIntComboBox, CXCheckB
 import json
 import time
 
+
 from scopes_map import srv, cmap, c_sign
 
-f = open('rf_power_calibr.json')
+import os.path as op
+script_path = op.dirname(op.realpath(__file__))
+f = open(script_path + '/rf_power_calibr.json')
 rf_pwr_clb = json.load(f)
 f.close()
 
