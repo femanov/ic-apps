@@ -5,9 +5,6 @@ from cservice import CXService
 import time
 from scopes_map import srv, cmap, c_sign, ltimer_scopes
 
-import signal
-signal.signal(signal.SIGINT, signal.SIG_DFL)
-
 
 class RFScopesProc:
     def __init__(self):
@@ -39,14 +36,14 @@ class RFScopesProc:
     def scope_measured(self, chan):
         self.updated_count += 1
         if self.updated_count == self.num_scopes:
-            self.shot_done(None)
+            self.shot_done()
 
-    def shot_done(self, timer):
+    def shot_done(self):
         self.updated_count = 0
         self.shot_c.setValue(self.shot_c.val+1)
         self.timer.singleShot(2000)
 
-    def timeout_proc(self, timer):
+    def timeout_proc(self):
         print('timed out? resetting', time.time() - self.t0)
         self.shot_c.setValue(1)
         self.t0 = time.time()
