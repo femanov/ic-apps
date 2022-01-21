@@ -114,28 +114,28 @@ class PUSwitch(BaseGridW):
         self.grid.addWidget(QLabel("Particles&users switching"), 0, 0, 1, 2, Qt.AlignHCenter)
 
         self.l_v34 = QLabel()
-        self.l_v34.setPixmap(QtGui.QPixmap(script_path + "/img/VEPP4logo_small.gif"))
+        self.l_v34.setPixmap(QtGui.QPixmap(f"{script_path}/img/VEPP4logo_small.gif"))
         self.grid.addWidget(self.l_v34, 1, 0, 1, 1, Qt.AlignHCenter)
 
         self.l_v2k = QLabel()
-        self.l_v2k.setPixmap(QtGui.QPixmap(script_path + "/img/v2k_logo_blue.png"))
+        self.l_v2k.setPixmap(QtGui.QPixmap(f"{script_path}/img/v2k_logo_blue.png"))
         self.grid.addWidget(self.l_v2k, 1, 1, 1, 1, Qt.AlignHCenter)
 
         self.b_e2v4 = CXPushButton('-->e2v4', cname='cxhw:0.ddm.e2v4')
         self.grid.addWidget(self.b_e2v4, 2, 0)
-        self.b_e2v4.setStyleSheet('background-color:' + mode_colors['e2v4'] + ';')
+        self.b_e2v4.setStyleSheet(f"background-color: {mode_colors['e2v4']};")
 
         self.b_p2v4 = CXPushButton('-->p2v4', cname='cxhw:0.ddm.p2v4')
         self.grid.addWidget(self.b_p2v4, 3, 0)
-        self.b_p2v4.setStyleSheet('background-color:' + mode_colors['p2v4'] + ';')
+        self.b_p2v4.setStyleSheet(f"background-color: {mode_colors['p2v4']};")
 
         self.b_e2v2 = CXPushButton('-->e2v2', cname='cxhw:0.ddm.e2v2')
         self.grid.addWidget(self.b_e2v2, 2, 1)
-        self.b_e2v2.setStyleSheet('background-color:' + mode_colors['e2v2'] + ';')
+        self.b_e2v2.setStyleSheet(f"background-color: {mode_colors['e2v2']};")
 
         self.b_p2v2 = CXPushButton('-->p2v2', cname='cxhw:0.ddm.p2v2')
         self.grid.addWidget(self.b_p2v2, 3, 1)
-        self.b_p2v2.setStyleSheet('background-color:' + mode_colors['p2v2'] + ';')
+        self.b_p2v2.setStyleSheet(f"background-color: {mode_colors['p2v2']};")
 
         self.grid.addWidget(QLabel("current state"), 4, 0, 1, 2, Qt.AlignHCenter)
 
