@@ -15,23 +15,18 @@ class RFScopesProc:
         self.num_scopes = len(ltimer_scopes)
         self.updated_count = 0
 
+        self.markers_passed = {}
+
         self.shot_c = cda.IChan(srv + '.' + "l_timer.shot", on_update=True)
         self.shot_c.setValue(1)
 
         self.phase_c = cda.IChan(srv + '.' + "l_timer.phase", on_update=True)
-        #self.phase_c.valueMeasured.connect(self.print_val)
         self.gatestat_c = cda.IChan(srv + '.' + "l_timer.gatestat", on_update=True)
-        #self.gatestat_c.valueMeasured.connect(self.print_val)
         self.event_c = cda.IChan(srv + '.' + "l_timer.event", on_update=True)
-        #self.event_c.valueMeasured.connect(self.print_val)
 
         self.timer = cda.Timer()
         self.timer.singleShot(2000, proc=self.timeout_proc)
         self.t0 = time.time()
-
-
-    def print_val(self, chan):
-        print(chan.name, chan.val, chan.time)
 
     def scope_measured(self, chan):
         self.updated_count += 1
@@ -56,8 +51,3 @@ class RFScopesProcService(CXService):
 
 
 s = RFScopesProcService('rf_scopes_proc')
-
-
-#rf_proc = RFScopesProc()
-
-#cda.main_loop()
