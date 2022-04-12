@@ -23,10 +23,9 @@ bline_parts = {
 
 
 class PUSwitcher:
-    switching_done = cda.Signal()
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args)
+        self.switching_done = cda.InstSignal()
 
         self.mode_ctl = kwargs.get('mode_ctl', ModesClient())
         self.k500ctl = kwargs.get('k500ctl', K500Director())

@@ -15,12 +15,10 @@ runmodes = {
 
 
 class LinStarter:
-    runmodeChanged = cda.Signal(str)
-    nshotsChanged = cda.Signal(int)
-    runDone = cda.Signal()
-
     def __init__(self):
-        super().__init__()
+        self.runmodeChanged = cda.InstSignal(str)
+        self.nshotsChanged = cda.InstSignal(int)
+        self.runDone = cda.InstSignal()
 
         # state variables.
         self.runmode = None

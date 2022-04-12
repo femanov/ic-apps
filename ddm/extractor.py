@@ -18,13 +18,13 @@ clock_names = {
 
 
 class Extractor:
-    extractionDone = cda.Signal()
-    unexpectedShot = cda.Signal()
-    trainingShot = cda.Signal()
-    trainingStopped = cda.Signal()
-
     def __init__(self):
         super().__init__()
+        self.extractionDone = cda.InstSignal()
+        self.unexpectedShot = cda.InstSignal()
+        self.trainingShot = cda.InstSignal()
+        self.trainingStopped = cda.InstSignal()
+
         self.extract_request = False
         self.training_shots = False
         self.training_interval = 3
