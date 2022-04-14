@@ -3,6 +3,7 @@ from cservice import CXService
 import pycx4.pycda as cda
 from injext_looper import InjExtLoop
 
+
 class DDMService(CXService):
     def main(self):
         self.injext_loop = InjExtLoop()
