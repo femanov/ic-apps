@@ -147,6 +147,11 @@ class PUSwitch(BaseGridW):
         self.auto_v2k_ctl = CXSwitch(cname='cxhw:0.ddm.v2k_auto')
         self.grid.addWidget(self.auto_v2k_ctl, 6, 1)
 
+        self.grid.addWidget(QLabel("allow vepp3/4 automatics"), 7, 0)
+        self.auto_v4_ctl = CXSwitch(cname='cxhw:0.ddm.vepp4_auto')
+        self.grid.addWidget(self.auto_v4_ctl, 7, 1)
+
+
 
 class DDMWidget(BaseGridW):
     def __init__(self, parent=None):

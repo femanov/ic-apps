@@ -95,7 +95,19 @@ class InjExtLoop:
         self.c_v2k_offline = cda.IChan('cxhw:0.bep.offline', on_update=True)
         self.c_v2k_offline.valueMeasured.connect(self.v2k_offline_proc)
 
+        self.c_vepp4_auto = cda.IChan('cxhw:0.ddm.vepp4_auto', on_update=True)
+        self.c_vepp4_state = cda.StrChan('cxout:2.vepp3.tStatus', on_update=True, max_nelems=30)
+        self.c_vepp4_state.valueMeasured.connect(self.vepp4_inject_proc)
+
         self.linbeam_cor = LinBeamCtl()
+
+    def vepp4_inject_proc(self, chan):
+        if self.c_vepp4_auto.val == 0 or self.pu_mode not in {'e2v4', 'p2v4'}:
+            return
+        if self.c_vepp4_state == 'Injection':
+            self.linbeam_cor.open_beam()
+        else:
+            self.linbeam_cor.close_beam()
 
     def v2k_offline_proc(self, chan):
         if self.c_v2k_auto.val == 0 or self.pu_mode not in {'e2v2', 'p2v2'}:
