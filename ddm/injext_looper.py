@@ -104,7 +104,7 @@ class InjExtLoop:
     def vepp4_inject_proc(self, chan):
         if self.c_vepp4_auto.val == 0 or self.pu_mode not in {'e2v4', 'p2v4'}:
             return
-        if self.c_vepp4_state == 'Injection':
+        if self.c_vepp4_state.val == 'Injection':
             self.linbeam_cor.open_beam()
         else:
             self.linbeam_cor.close_beam()
