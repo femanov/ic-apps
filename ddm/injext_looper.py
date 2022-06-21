@@ -107,8 +107,10 @@ class InjExtLoop:
             return
         if self.c_vepp4_state.val == 'Injection':
             self.linbeam_cor.open_beam()
+            print("open beam")
         else:
             self.linbeam_cor.close_beam()
+            print('close beam')
 
     def v2k_offline_proc(self, chan):
         if self.c_v2k_auto.val == 0 or self.pu_mode not in {'e2v2', 'p2v2'}:
