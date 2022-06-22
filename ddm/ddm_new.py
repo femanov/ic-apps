@@ -13,6 +13,7 @@ import os.path as op
 
 script_path = op.dirname(op.realpath(__file__))
 
+ctrl_srv = 'cxhw:0'
 
 class InjExtCtl(BaseGridW):
     def __init__(self, parent=None):
@@ -40,31 +41,31 @@ class InjExtCtl(BaseGridW):
         grid.addWidget(self.dump_open_btn, 3, 3)
 
         grid.addWidget(QLabel("e-shots"), 4, 0, 1, 1, Qt.AlignRight)
-        self.sb_eshots = CXSpinBox(cname='cxhw:0.ddm.eshots')
+        self.sb_eshots = CXSpinBox(cname=f'{ctrl_srv}.ddm.eshots')
         grid.addWidget(self.sb_eshots, 4, 1)
 
         grid.addWidget(QLabel("p-shots"), 4, 2, 1, 1, Qt.AlignRight)
-        self.sb_eshots = CXSpinBox(cname='cxhw:0.ddm.pshots')
+        self.sb_eshots = CXSpinBox(cname=f'{ctrl_srv}.ddm.pshots')
         grid.addWidget(self.sb_eshots, 4, 3)
 
         grid.addWidget(QLabel("particles"), 5, 0, 1, 1, Qt.AlignRight)
-        self.cb_particles = CXTextComboBox(cname='cxhw:0.ddm.particles', values=['e', 'p'],
+        self.cb_particles = CXTextComboBox(cname=f'{ctrl_srv}.ddm.particles', values=['e', 'p'],
                                            icons=[script_path + '/img/electron.png', script_path + '/img/positron.png'])
         grid.addWidget(self.cb_particles, 5, 1)
 
-        self.b_inject = CXPushButton('Inject', cname='cxhw:0.ddm.inject')
+        self.b_inject = CXPushButton('Inject', cname=f'{ctrl_srv}.ddm.inject')
         grid.addWidget(self.b_inject, 5, 2)
 
-        self.b_extract = CXPushButton('Extract', cname='cxhw:0.ddm.extract')
+        self.b_extract = CXPushButton('Extract', cname=f'{ctrl_srv}.ddm.extract')
         grid.addWidget(self.b_extract, 5, 3)
 
-        self.b_round = CXPushButton('Round', cname='cxhw:0.ddm.nround')
+        self.b_round = CXPushButton('Round', cname=f'{ctrl_srv}.ddm.nround')
         grid.addWidget(self.b_round, 6, 0)
 
-        self.b_auto = CXPushButton('Auto', cname='cxhw:0.ddm.autorun')
+        self.b_auto = CXPushButton('Auto', cname=f'{ctrl_srv}.ddm.autorun')
         grid.addWidget(self.b_auto, 6, 1)
 
-        self.b_stop = CXPushButton('Stop', cname='cxhw:0.ddm.stop')
+        self.b_stop = CXPushButton('Stop', cname=f'{ctrl_srv}.ddm.stop')
         grid.addWidget(self.b_stop, 6, 2)
 
 
@@ -79,19 +80,19 @@ class InjExtState(BaseGridW):
         self.grid.addWidget(self.sb_nshots, 1, 1)
 
         self.grid.addWidget(QLabel("injected"), 1, 2, Qt.AlignRight)
-        self.inj_led = CXEventLed(cname='cxhw:0.ddm.injected')
+        self.inj_led = CXEventLed(cname=f'{ctrl_srv}.ddm.injected')
         self.grid.addWidget(self.inj_led, 1, 3, Qt.AlignLeft)
 
         self.grid.addWidget(QLabel("extracted"), 2, 2, Qt.AlignRight)
-        self.ext_led = CXEventLed(cname='cxhw:0.ddm.extracted')
+        self.ext_led = CXEventLed(cname=f'{ctrl_srv}.ddm.extracted')
         self.grid.addWidget(self.ext_led, 2, 3, Qt.AlignLeft)
 
         self.grid.addWidget(QLabel("state"), 3, 0)
-        self.state_line = CXLineEdit(cname='cxhw:0.ddm.state', readonly=True, max_len=100)
+        self.state_line = CXLineEdit(cname=f'{ctrl_srv}.ddm.state', readonly=True, max_len=100)
         self.grid.addWidget(self.state_line, 3, 1)
 
         self.grid.addWidget(QLabel("runmode"), 4, 0)
-        self.runmode_line = CXLineEdit(cname='cxhw:0.ddm.icrunmode', readonly=True, max_len=100)
+        self.runmode_line = CXLineEdit(cname=f'{ctrl_srv}.ddm.icrunmode', readonly=True, max_len=100)
         self.grid.addWidget(self.runmode_line, 4, 1)
 
 
@@ -103,7 +104,7 @@ class K500State(BaseGridW):
 
         self.grid.addWidget(QLabel("mode"), 1, 0)
         vals = ['e2v2', 'p2v2', 'e2v4', 'p2v4']
-        self.cb_particles = CXTextComboBox(cname='cxhw:0.k500.modet', values=vals,
+        self.cb_particles = CXTextComboBox(cname=f'{ctrl_srv}.k500.modet', values=vals,
                                            colors=[mode_colors[x] for x in vals])
         self.grid.addWidget(self.cb_particles, 1, 1)
 
@@ -121,34 +122,34 @@ class PUSwitch(BaseGridW):
         self.l_v2k.setPixmap(QtGui.QPixmap(f"{script_path}/img/v2k_logo_blue.png"))
         self.grid.addWidget(self.l_v2k, 1, 1, 1, 1, Qt.AlignHCenter)
 
-        self.b_e2v4 = CXPushButton('-->e2v4', cname='cxhw:0.ddm.e2v4')
+        self.b_e2v4 = CXPushButton('-->e2v4', cname=f'{ctrl_srv}.ddm.e2v4')
         self.grid.addWidget(self.b_e2v4, 2, 0)
         self.b_e2v4.setStyleSheet(f"background-color: {mode_colors['e2v4']};")
 
-        self.b_p2v4 = CXPushButton('-->p2v4', cname='cxhw:0.ddm.p2v4')
+        self.b_p2v4 = CXPushButton('-->p2v4', cname=f'{ctrl_srv}.ddm.p2v4')
         self.grid.addWidget(self.b_p2v4, 3, 0)
         self.b_p2v4.setStyleSheet(f"background-color: {mode_colors['p2v4']};")
 
-        self.b_e2v2 = CXPushButton('-->e2v2', cname='cxhw:0.ddm.e2v2')
+        self.b_e2v2 = CXPushButton('-->e2v2', cname=f'{ctrl_srv}.ddm.e2v2')
         self.grid.addWidget(self.b_e2v2, 2, 1)
         self.b_e2v2.setStyleSheet(f"background-color: {mode_colors['e2v2']};")
 
-        self.b_p2v2 = CXPushButton('-->p2v2', cname='cxhw:0.ddm.p2v2')
+        self.b_p2v2 = CXPushButton('-->p2v2', cname=f'{ctrl_srv}.ddm.p2v2')
         self.grid.addWidget(self.b_p2v2, 3, 1)
         self.b_p2v2.setStyleSheet(f"background-color: {mode_colors['p2v2']};")
 
         self.grid.addWidget(QLabel("current state"), 4, 0, 1, 2, Qt.AlignHCenter)
 
         #self.grid.addWidget(QLabel("switching"), 5, 0, 1, 2, Qt.AlignHCenter)
-        self.sw_progress = CXProgressBar(cname='cxhw:0.k500.mode_progress')
+        self.sw_progress = CXProgressBar(cname=f'{ctrl_srv}.k500.mode_progress')
         self.grid.addWidget(self.sw_progress, 5, 0, 1, 2)
 
         self.grid.addWidget(QLabel("allow vepp2k automatics"), 6, 0)
-        self.auto_v2k_ctl = CXSwitch(cname='cxhw:0.ddm.v2k_auto')
+        self.auto_v2k_ctl = CXSwitch(cname=f'{ctrl_srv}.ddm.v2k_auto')
         self.grid.addWidget(self.auto_v2k_ctl, 6, 1)
 
         self.grid.addWidget(QLabel("allow vepp3/4 automatics"), 7, 0)
-        self.auto_v4_ctl = CXSwitch(cname='cxhw:0.ddm.vepp4_auto')
+        self.auto_v4_ctl = CXSwitch(cname=f'{ctrl_srv}.ddm.vepp4_auto')
         self.grid.addWidget(self.auto_v4_ctl, 7, 1)
 
 
