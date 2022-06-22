@@ -61,7 +61,6 @@ class InjExtLoop:
         # output channels
         self.c_state = cda.StrChan('cxhw:0.ddm.state', on_update=True, max_nelems=20)
         self.c_stateMsg = cda.StrChan('cxhw:0.ddm.stateMsg', on_update=True, max_nelems=100)
-
         self.c_icrunmode = cda.StrChan('cxhw:0.ddm.ICRunMode', on_update=True, max_nelems=20)
 
         # command channels
@@ -102,8 +101,9 @@ class InjExtLoop:
         self.linbeam_cor = LinBeamCtl()
 
     def vepp4_inject_proc(self, chan):
-        if self.c_vepp4_auto.val == 0 or self.pu_mode not in {'e2v4', 'p2v4'}:
-            print("not in state for:", self.c_vepp4_auto.val, self.pu_mode)
+        mode = self.pu_ctl.mode
+        if self.c_vepp4_auto.val == 0 or mode not in {'e2v4', 'p2v4'}:
+            print("not in state for:", self.c_vepp4_auto.val, mode)
             return
         if self.c_vepp4_state.val == 'Injection':
             self.linbeam_cor.open_beam()
@@ -113,7 +113,8 @@ class InjExtLoop:
             print('close beam')
 
     def v2k_offline_proc(self, chan):
-        if self.c_v2k_auto.val == 0 or self.pu_mode not in {'e2v2', 'p2v2'}:
+        mode = self.pu_ctl.mode
+        if self.c_v2k_auto.val == 0 or mode not in {'e2v2', 'p2v2'}:
             return
         if self.c_v2k_offline.val == 1:
             self.linbeam_cor.close_beam()
