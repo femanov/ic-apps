@@ -58,7 +58,7 @@ class PUSwitcher:
         self.timer = cda.Timer()
 
     def init_cur_mode(self, mode):
-        self.mode = mode if self.mode is None
+        self.mode = mode if self.mode is None else self.mode
 
     def what2switch(self, mode):
         bline = bline_parts[mode]
