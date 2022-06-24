@@ -5,7 +5,6 @@ elif "pycx4.pycda" in sys.modules:
     import pycx4.pycda as cda
 
 syn_srv = 'canhw:19'
-prefix = cx_srv + '.'
 
 runmodes = {
     'continous': 0,
