@@ -4,7 +4,7 @@ if "pycx4.qcda" in sys.modules:
 elif "pycx4.pycda" in sys.modules:
     import pycx4.pycda as cda
 
-cx_srv = 'canhw:19'
+syn_srv = 'canhw:19'
 prefix = cx_srv + '.'
 
 runmodes = {
@@ -31,20 +31,28 @@ class LinStarter:
         self.pshots = 10
         self.particles = 'e'
 
-        self.c_runmode = cda.DChan(prefix + 'syn_ie4.mode', on_update=True)
-        self.c_start = cda.DChan(prefix + 'syn_ie4.bum_start', on_update=True)
-        self.c_stop = cda.DChan(prefix + 'syn_ie4.bum_stop', on_update=True)
-        self.c_lamsig = cda.DChan(prefix + 'syn_ie4.lam_sig', on_update=True)
-        self.c_nshots = cda.DChan(prefix + 'syn_ie4.re_bum', on_update=True)
+        self.c_runmode = cda.DChan(f'{syn_srv}.syn_ie4.mode', on_update=True)
+        self.c_start = cda.IChan(f'{syn_srv}.syn_ie4.bum_start', on_update=True)
+        self.c_stop = cda.IChan(f'{syn_srv}.syn_ie4.bum_stop', on_update=True)
+        self.c_lamsig = cda.DChan(f'{syn_srv}.syn_ie4.lam_sig', on_update=True)
+        self.c_nshots = cda.IChan(f'{syn_srv}.syn_ie4.re_bum', on_update=True)
 
         self.c_runmode.valueMeasured.connect(self.runmode_update)
         self.c_nshots.valueChanged.connect(self.nshots_update)
         self.c_lamsig.valueMeasured.connect(self.done_proc)
 
-        self.c_eshots = cda.DChan('cxhw:0.ddm.eshots')
-        self.c_pshots = cda.DChan('cxhw:0.ddm.pshots')
+        self.c_eshots = cda.IChan('cxhw:0.ddm.eshots')
+        self.c_pshots = cda.IChan('cxhw:0.ddm.pshots')
         self.c_eshots.valueChanged.connect(self.shots_update)
         self.c_pshots.valueChanged.connect(self.shots_update)
+
+        self.c_shots_left_reg = cda.IChan(f'{syn_srv}.syn_ie4.ie_bum', on_update=True)
+        self.c_shots_left_reg.valueChanged.connect(self.shots_left_update)
+        self.c_shots_left = cda.IChan('cxhw:0.ddm.shots_left')
+
+    def shots_left_update(self, chan):
+        if chan.val != 4095:
+            self.c_shots_left.setValue(chan.val)
 
     def shots_update(self, chan):
         if chan is self.c_eshots:
@@ -105,7 +113,4 @@ class LinStarter:
     def stop(self):
         self.c_stop.setValue(1)
         self.running = False
-
-    def shots_left_update(self, chan):
-        pass
 
