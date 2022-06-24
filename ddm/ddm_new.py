@@ -76,7 +76,7 @@ class InjExtState(BaseGridW):
         self.grid.addWidget(QLabel("Machne state"), 0, 0, 1, 4, Qt.AlignHCenter)
 
         self.grid.addWidget(QLabel("shots left"), 1, 0)
-        self.sb_nshots = CXSpinBox(cname='canhw:19.syn_ie4.ie_bum')
+        self.sb_nshots = CXSpinBox(cname=f'{ctrl_srv}.ddm.shots_left')
         self.grid.addWidget(self.sb_nshots, 1, 1)
 
         self.grid.addWidget(QLabel("injected"), 1, 2, Qt.AlignRight)
