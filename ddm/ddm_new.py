@@ -30,14 +30,14 @@ class InjExtCtl(BaseGridW):
 
         # turning magnet control
         grid.addWidget(QLabel("beam dump"), 3, 0, 1, 1, Qt.AlignRight)
-        self.linac_dump_state = CXIntLabel(cname='canhw:21.turnmag.cur_direction',
+        self.linac_dump_state = CXIntLabel(cname='canhw:21.rotmag.cur_direction',
                                            values={2: '->Dump', 1: '->Ring', 3: 'between'},
                                            colors={2: '#FF0000', 1: '#00FF00', 3: '#FFFF00'})
         grid.addWidget(self.linac_dump_state, 3, 1)
 
-        self.dump_close_btn = CXPushButton('toDump', cname='canhw:21.turnmag.go_bury_max')
+        self.dump_close_btn = CXPushButton('toDump', cname='canhw:21.rotmag.go_dump_max')
         grid.addWidget(self.dump_close_btn, 3, 2)
-        self.dump_open_btn = CXPushButton('toRing', cname='canhw:21.turnmag.go_ring_max')
+        self.dump_open_btn = CXPushButton('toRing', cname='canhw:21.rotmag.go_ring_max')
         grid.addWidget(self.dump_open_btn, 3, 3)
 
         grid.addWidget(QLabel("e-shots"), 4, 0, 1, 1, Qt.AlignRight)
