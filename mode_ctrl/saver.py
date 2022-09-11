@@ -11,7 +11,7 @@ from acc_db.db import ModesDB
 
 class SaverWidget(BaseGridW):
     def __init__(self, parent=None):
-        super(SaverWidget, self).__init__(parent)
+        super().__init__(parent)
         self.modes_db = ModesDB()
 
         self.flist = ModeListCtrl()
@@ -96,6 +96,8 @@ class SaverWidget(BaseGridW):
             msg_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(srv_time/1e6))
         self.status_text.appendPlainText(msg_time + ": " + msg)
         self.status_text.ensureCursorVisible()
+
+
 
 
 app = QtWidgets.QApplication(['saver'])
