@@ -15,7 +15,7 @@ class SaverWidget(BaseGridW):
         self.modes_db = ModesDB()
 
         self.flist = ModeListCtrl()
-        self.flist.setFixedSize(900, 800)
+        self.flist.setFixedSize(1000, 800)
         self.grid.addWidget(self.flist, 0, 0, 2, 1)
 
         self.stree = SysTree()
