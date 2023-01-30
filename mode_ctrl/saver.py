@@ -23,7 +23,7 @@ class SaverWidget(BaseGridW):
         self.stree.selectionChanged.connect(self.sys_cb)
 
         self.kindt = KindTable()
-        self.kindt.setFixedSize(350, 160)
+        self.kindt.setFixedSize(280, 160)
         self.grid.addWidget(self.kindt, 1, 1)
         self.kindt.selectionChanged.connect(self.kinds_cb)
 
