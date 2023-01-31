@@ -41,7 +41,7 @@ class InjExtLoop:
         self.modeCtl = ModesClient()
         self.pu_ctl = PUSwitcher()
 
-        self.mode_subsys = [37, 38, 39]
+        self.mode_subsys = [37, 38, 39, 86]
 
         self.modeCtl.markedReady.connect(self.kickers_loaded)
         self.linStarter.runDone.connect(self.next_state)
