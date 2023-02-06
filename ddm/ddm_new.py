@@ -5,7 +5,7 @@ from cxwidgets.aQt.QtCore import Qt
 from cxwidgets.aQt import QtGui
 
 from cxwidgets import CXSwitch, CXSpinBox, CXPushButton, CXEventLed, CXTextComboBox, CXLineEdit, CXProgressBar,\
-    HLine, BaseGridW, CXIntComboBox, CXIntLabel
+    HLine, BaseGridW, CXIntComboBox, CXIntLabel, CXDevSwitch
 from training_ctl_widget import TrainingCtlW
 
 from acc_ctl.mode_defs import mode_colors
@@ -26,6 +26,27 @@ class InjExtCtl(BaseGridW):
         grid.addWidget(self.linac_mode_cb, 1, 1)
 
         grid.addWidget(QLabel("beam switch"), 2, 0, 1, 1, Qt.AlignRight)
+        grid.addWidget(CXDevSwitch(devname='beamswitch'), 2, 1)
+        self.beam_swc_state = CXIntLabel(cname='beamswitch.state',
+                                        values={
+                                            -2: 'failed',
+                                            -1: 'unknown',
+                                            0:  'off',
+                                            1:  'on',
+                                            2: 'turning_off',
+                                            3: 'turning_on',
+                                           },
+                                        colors={
+                                            -2: '#000099',
+                                            -1: '#FFFFFF',
+                                            0: '#FF0000',
+                                            1: '#00FF00',
+                                            2: '#FFFF00',
+                                            3: '#FFFF00',
+                                                })
+        self.beam_swc_state.setMinimumWidth(80)
+        grid.addWidget(self.beam_swc_state, 2, 2)
+
 
         # turning magnet control
         grid.addWidget(QLabel("beam dump"), 3, 0, 1, 1, Qt.AlignRight)
