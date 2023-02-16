@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 from cxwidgets.aQt.QtWidgets import QLabel, QApplication
 from cxwidgets.aQt.QtCore import Qt
 from cxwidgets.aQt import QtGui
@@ -134,13 +133,13 @@ class PUSwitch(BaseGridW):
 
         self.grid.addWidget(QLabel("Particles&users switching"), 0, 0, 1, 2, Qt.AlignHCenter)
 
-        self.l_v34 = QLabel()
-        self.l_v34.setPixmap(QtGui.QPixmap(f"{script_path}/img/VEPP4logo_small.gif"))
-        self.grid.addWidget(self.l_v34, 1, 0, 1, 1, Qt.AlignHCenter)
-
-        self.l_v2k = QLabel()
-        self.l_v2k.setPixmap(QtGui.QPixmap(f"{script_path}/img/v2k_logo_blue.png"))
-        self.grid.addWidget(self.l_v2k, 1, 1, 1, 1, Qt.AlignHCenter)
+        # self.l_v34 = QLabel()
+        # self.l_v34.setPixmap(QtGui.QPixmap(f"{script_path}/img/VEPP4logo_small.gif"))
+        # self.grid.addWidget(self.l_v34, 1, 0, 1, 1, Qt.AlignHCenter)
+        #
+        # self.l_v2k = QLabel()
+        # self.l_v2k.setPixmap(QtGui.QPixmap(f"{script_path}/img/v2k_logo_blue.png"))
+        # self.grid.addWidget(self.l_v2k, 1, 1, 1, 1, Qt.AlignHCenter)
 
         self.b_e2v4 = CXPushButton('-->e2v4', cname='ddm.e2v4')
         self.grid.addWidget(self.b_e2v4, 2, 0)
