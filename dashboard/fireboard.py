@@ -85,6 +85,7 @@ class V34Info(BaseGridW):
                                            'Extraction': f'{script_path}/img/transfer.png',
                                            'Cycle': f'{script_path}/img/cycle.png',
                                            'Experiment': f'{script_path}/img/experiment.png',
+                                           'ReadyForExtraction': f'{script_path}/img/transfer.png',
                                            }
                                      )
         self.grid.addWidget(self.vepp3_status_l, 0, 3)
