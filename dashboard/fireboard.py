@@ -11,7 +11,7 @@ script_path = op.dirname(op.realpath(__file__))
 class V2kInfo(BaseGridW):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setStyleSheet('QLabel{font-size:20pt; color:#009900}')
+        self.setStyleSheet('QLabel{font-size:20pt; color:#00e000}')
 
         self.grid.addWidget(QLabel("VEPP2k:"), 0, 0)
         self.v2k_particles_lab = CXIntLabel(cname='cxout:1.v2k.regime',
@@ -68,7 +68,7 @@ class V2kInfo(BaseGridW):
 class V34Info(BaseGridW):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setStyleSheet('QLabel{font-size:20pt; color:#009900;}')
+        self.setStyleSheet('QLabel{font-size:20pt; color:#00E000;}')
 
         self.grid.addWidget(QLabel("VEPP3:"), 0, 0)
 
@@ -134,8 +134,8 @@ class FireBoardWidget(BaseGridW):
         self.plt_bep = self.graph_bep.addPlot(labels={'left': ('BEP current', 'mA'), 'bottom': ('Age', 's')})
         self.plt_bep.setXRange(0, 900, padding=0.02)
         self.plt_bep.invertX(True)
-        self.pen_e = pg.mkPen(0, 255, 0, width=self.line_w)
-        self.pen_p = pg.mkPen(255, 0, 0, width=self.line_w)
+        self.pen_e = pg.mkPen(0, 200, 0, width=self.line_w)
+        self.pen_p = pg.mkPen(200, 0, 0, width=self.line_w)
         self.curv_bep = None
 
         plt_v2k = self.graph_v2k.addPlot(labels={'left': ('V2k current', 'mA'), 'bottom': ('Age', 's')})
