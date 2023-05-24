@@ -13,7 +13,7 @@ class V2kInfo(BaseGridW):
         super().__init__(parent)
         self.setStyleSheet('QLabel{font-size:20pt; color:#00e000}')
 
-        self.grid.addWidget(QLabel("VEPP2k:"), 0, 0)
+        self.grid.addWidget(QLabel("BEP:"), 0, 0)
         self.v2k_particles_lab = CXIntLabel(cname='cxout:1.v2k.regime',
                                             pics={1: f'{script_path}/img/electron.png',
                                                   2: f'{script_path}/img/electron.png',
@@ -44,6 +44,8 @@ class V2kInfo(BaseGridW):
                                            '4->3': f'{script_path}/img/cycle.png',
                                            '3->1': f'{script_path}/img/cycle.png',
                                            '1->3': f'{script_path}/img/cycle.png',
+                                           '1->1': f'{script_path}/img/cycle.png',
+                                           '3->3': f'{script_path}/img/cycle.png',
                                            }
                                      )
         self.grid.addWidget(self.bep_state_l, 0, 3)
@@ -111,7 +113,7 @@ class V34Info(BaseGridW):
 class FireBoardWidget(BaseGridW):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setStyleSheet('background: #404040;'
+        self.setStyleSheet('background: #202010;'
                            '')
 
         self.grid.addWidget(V2kInfo(), 0, 0)
