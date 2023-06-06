@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from cxwidgets.aQt.QtWidgets import QLabel, QApplication, QSpacerItem
 from cxwidgets import CXEventLed, HLine, BaseGridW, CXIntLabel, CXStrLabel
-from cxwidgets import CXScrollPlotDataItem, TimeAxisItem, AgeAxisItem, CXScrollAgePlotDataItem
+from cxwidgets import CXScrollPlotDataItem, AgeAxisItem, CXScrollAgePlotDataItem
 import pyqtgraph as pg
 import os.path as op
 import pycx4.qcda as cda
@@ -159,7 +159,7 @@ class FireBoardWidget(BaseGridW):
         plt_vepp3.setXRange(0, 900, padding=0.02)
         plt_vepp3.invertX(True)
 
-        curv_v3_cur = CXScrollAgePlotDataItem(cname='cxout:2.vepp3.currentTotal', pen=self.pen_e, length=900, utime=1000)
+        curv_v3_cur = CXScrollAgePlotDataItem(cname='cxout:2.vepp3.currentTotal', pen=self.pen_e, length=1800, utime=1000)
         plt_vepp3.addItem(curv_v3_cur)
 
 
@@ -173,10 +173,8 @@ class FireBoardWidget(BaseGridW):
         plt_vepp4.addItem(curv_v4_cur_e2)
         curv_v4_cur_p1 = CXScrollAgePlotDataItem(cname='cxout:2.vepp4.currentP1', pen=self.pen_p, length=900, utime=1000)
         plt_vepp4.addItem(curv_v4_cur_p1)
-        curv_v4_cur_p2 = CXScrollAgePlotDataItem(cname='cxout:2.vepp4.currentP2', pen=self.pen_p, length=900, utime=1000)
+        curv_v4_cur_p2 = CXScrollAgePlotDataItem(cname='cxout:2.vepp4.currentP2', pen=self.pen_p, length=5000, utime=1000)
         plt_vepp4.addItem(curv_v4_cur_p2)
-
-
 
     def regime_proc(self, chan):
         if chan.val in (1, 2):
@@ -193,11 +191,11 @@ class FireBoardWidget(BaseGridW):
             self.plt_bep.removeItem(self.curv_bep)
         if self.v2k_particles == 'e+':
             self.curv_bep = CXScrollAgePlotDataItem(cname='cxout:1.bep.current.p', pen=self.pen_p,
-                                                    symbolBrush=(255, 0, 0), symbolPen='w',
+                                                    #symbolBrush=(255, 0, 0), symbolPen='w',
                                                     length=900, utime=1000)
         elif self.v2k_particles == 'e-':
             self.curv_bep = CXScrollAgePlotDataItem(cname='cxout:1.bep.current.e', pen=self.pen_e,
-                                                    symbolBrush=(0, 255, 0), symbolPen='w',
+                                                    #symbolBrush=(0, 255, 0), symbolPen='w',
                                                     length=900, utime=1000)
         self.plt_bep.addItem(self.curv_bep)
 
